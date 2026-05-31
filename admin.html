@@ -13,7 +13,7 @@ html,body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;mi
 /* AUTH */
 #authWrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg);}
 .auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:360px;text-align:center;}
-.auth-logo{font-size:22px;font-weight:800;letter-spacing:3px;margin-bottom:4px;}<br>
+.auth-logo{font-size:22px;font-weight:800;letter-spacing:3px;margin-bottom:4px;}
 .auth-logo .bl{color:var(--accent);}.auth-logo .tl{color:var(--teal);}
 .auth-sub{color:var(--t2);font-size:12px;margin-bottom:24px;}
 .auth-badge{display:inline-block;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5;font-size:10px;padding:3px 10px;border-radius:20px;margin-bottom:20px;}
@@ -84,19 +84,17 @@ nav.anav{background:rgba(8,10,16,0.92);border-bottom:1px solid var(--border);pad
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="authWrap">
   <div class="auth-card">
     <div class="auth-logo"><span class="bl">SMART</span>-TOOL/<span class="tl">M</span></div>
     <div class="auth-sub">Administration Panel</div>
     <div class="auth-badge">🔐 Admin Access Required</div>
-    <input class="af" type="password" id="aKey" placeholder="Admin Key" onkeydown="if(event.key==='Enter')authAdmin()"/>
+    <input class="af" type="password" id="aKey" placeholder="Admin Key"/>
     <button class="ab2" onclick="authAdmin()">Access Admin Panel →</button>
     <div class="ae" id="authErr"></div>
   </div>
 </div>
 
-<!-- ADMIN APP -->
 <div id="adminApp">
   <nav class="anav">
     <div class="anav-logo"><span class="bl">SMART</span>-TOOL/<span class="tl">M</span></div>
@@ -104,20 +102,17 @@ nav.anav{background:rgba(8,10,16,0.92);border-bottom:1px solid var(--border);pad
   </nav>
   <div class="amain">
 
-    <!-- Stats -->
     <div class="stat-grid" id="statsGrid">
       <div class="stat-card"><div class="stat-val" id="statTotal">–</div><div class="stat-lbl">Total Users</div></div>
       <div class="stat-card"><div class="stat-val" id="statOnline">–</div><div class="stat-lbl">Online Now</div></div>
       <div class="stat-card"><div class="stat-val" id="statBlocked">–</div><div class="stat-lbl">Blocked</div></div>
     </div>
 
-    <!-- Tabs -->
     <div class="atabs">
       <button class="atab active" onclick="switchTab('users')">Users</button>
       <button class="atab" onclick="switchTab('sessions')">Live Sessions</button>
     </div>
 
-    <!-- Users tab -->
     <div class="aview active" id="tab-users">
       <div class="acard">
         <div class="acard-title">Create New User</div>
@@ -139,7 +134,6 @@ nav.anav{background:rgba(8,10,16,0.92);border-bottom:1px solid var(--border);pad
       </div>
     </div>
 
-    <!-- Sessions tab -->
     <div class="aview" id="tab-sessions">
       <div class="acard">
         <div class="acard-title">Active Sessions — <span id="sessCount">0</span> online</div>
@@ -205,12 +199,12 @@ async function loadUsers(){
       <td>
         <div class="action-group">
           ${u.blocked
-            ? `<button class="abtn success" onclick="unblockUser('${u._id}')">Unblock</button>`
-            : `<button class="abtn danger" onclick="blockUser('${u._id}')">Block</button>`
+            ? `<button class="abtn success" onclick="unblockUser('${u.id}')">Unblock</button>`
+            : `<button class="abtn danger" onclick="blockUser('${u.id}')">Block</button>`
           }
           ${u.online?`<button class="abtn kill" onclick="killSession('${h(u.username)}')">Kill Session</button>`:''}
-          <button class="abtn warn" onclick="resetPassword('${u._id}','${h(u.username)}')">Reset Password</button>
-          <button class="abtn danger" onclick="deleteUser('${u._id}','${h(u.username)}')">Delete</button>
+          <button class="abtn warn" onclick="resetPassword('${u.id}','${h(u.username)}')">Reset Password</button>
+          <button class="abtn danger" onclick="deleteUser('${u.id}','${h(u.username)}')">Delete</button>
         </div>
       </td>
     </tr>
@@ -278,6 +272,5 @@ function switchTab(name){
 
 document.getElementById('aKey').addEventListener('keydown',e=>{if(e.key==='Enter')authAdmin();});
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
