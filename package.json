@@ -1,25 +1,21 @@
 {
-  "name": "smarttool-server",
+  "name": "smart-tool-backend",
   "version": "1.0.0",
+  "description": "Secure Supabase client server integration architecture",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "multer": "^1.4.5-lts.1",
-    "pdf-lib": "^1.17.1",
-    "xlsx": "^0.18.5",
-    "jszip": "^3.10.1",
-    "pdfjs-dist": "^3.11.174",
-    "bcryptjs": "^2.4.3",
-    "connect-mongo": "^5.1.0",
-    "mongoose": "^8.3.2",
+    "express": "^4.19.2",
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
-    "express-rate-limit": "^7.3.0",
-    "uuid": "^9.0.1"
+    "express-rate-limit": "^7.2.0",
+    "multer": "^1.4.5-lts.1",
+    "jsonwebtoken": "^9.0.2",
+    "@supabase/supabase-js": "^2.43.4",
+    "pdf-lib": "^1.17.1",
+    "xlsx": "^0.18.5",
+    "jszip": "^3.10.1"
   }
 }
