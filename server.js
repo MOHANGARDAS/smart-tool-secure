@@ -173,7 +173,16 @@ app.post('/api/process/:tool', requireAuth, apiLimiter,
 );
 
 // Routing paths
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'SMART-TOOL-M (1).html')));
+// ── ADMIN AND USER HTML ROUTING FIX ──────────────────────
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
 
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'SMART-TOOL-M (1).html'));
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'SMART-TOOL-M (1).html'));
+});
 app.listen(PORT, () => console.log(`✓ Live Engine running securely on port ${PORT}`));
