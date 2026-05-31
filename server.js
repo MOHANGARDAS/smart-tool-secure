@@ -18,15 +18,13 @@ const JSZip          = require('jszip');
 // ── CONFIGURATION ─────────────────────────────────────────
 const PORT       = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'smarttool-master-secret-786';
-const ADMIN_KEY  = process.env.ADMIN_KEY || '1121'; // Default Password Set to 1121
+const ADMIN_KEY  = process.env.ADMIN_KEY || '1121'; // Admin panel password
 
-// Supabase URL aur Anon Key connection string handle karne ke liye
-const SUPABASE_URL = process.env.DATABASE_URL ? process.env.DATABASE_URL.split('@')[1]?.split('/')[0] : null;
+// Supabase Connection Configuration (Render Environment Variables se connect hoga)
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || `https://${SUPABASE_URL}`, 
-  process.env.SUPABASE_ANON_KEY || 'dummy-key-if-handled-via-direct-db-url'
-);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // In-memory sessions verification map
 const activeSessions = new Map();
@@ -38,7 +36,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 
-// Rate limiting to secure API from abuse
+// Security Rate Limiting
 const loginLimiter = rateLimit({ windowMs: 15*60*1000, max: 20, message: { error: 'Too many login attempts' } });
 const apiLimiter   = rateLimit({ windowMs: 60*1000, max: 30, message: { error: 'Rate limit exceeded' } });
 
@@ -75,7 +73,7 @@ function requireAdmin(req, res, next) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// AUTH ROUTES
+// REAL DATABASE AUTH ROUTES
 // ═══════════════════════════════════════════════════════════
 
 app.post('/api/login', loginLimiter, async (req, res) => {
@@ -83,43 +81,104 @@ app.post('/api/login', loginLimiter, async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
 
-    const token = jwt.sign({ username: username.toLowerCase().trim() }, JWT_SECRET, { expiresIn: '1h' });
-    activeSessions.set(username.toLowerCase().trim(), token);
+    const inputUser = username.toLowerCase().trim();
+    const inputPass = password.trim();
 
-    res.json({ ok: true, token, username });
+    // 🔍 Supabase Database se user check karna
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('username', inputUser)
+      .single();
+
+    if (error || !user) {
+      return res.status(401).json({ error: 'Invalid Username or Password' });
+    }
+
+    // Checking if account is blocked
+    if (user.blocked) {
+      return res.status(403).json({ error: 'Your account has been blocked by Admin' });
+    }
+
+    // Password validation match (Strict matching)
+    if (user.password !== inputPass) {
+      return res.status(401).json({ error: 'Invalid Username or Password' });
+    }
+
+    // Token Generation on successful auth
+    const token = jwt.sign({ username: inputUser }, JWT_SECRET, { expiresIn: '1h' });
+    activeSessions.set(inputUser, token);
+
+    // Update last login timestamp in Supabase database
+    await supabase
+      .from('users')
+      .update({ last_login: new Date(), online: true })
+      .eq('username', inputUser);
+
+    res.json({ ok: true, token, username: inputUser });
   } catch (e) {
-    res.status(500).json({ error: 'Server validation setup tracking failed' });
+    res.status(500).json({ error: 'Server authentication crash' });
   }
 });
 
-app.post('/api/logout', requireAuth, (req, res) => {
-  activeSessions.delete(req.user.username);
+app.post('/api/logout', requireAuth, async (req, res) => {
+  const user = req.user.username;
+  activeSessions.delete(user);
+  
+  await supabase
+    .from('users')
+    .update({ online: false })
+    .eq('username', user);
+
   res.json({ ok: true });
 });
 
 // ═══════════════════════════════════════════════════════════
-// ADMIN API ENDPOINTS (FIXED & ADDED)
+// REAL ADMIN MANAGEMENT ENDPOINTS
 // ═══════════════════════════════════════════════════════════
 
 app.get('/api/admin/users', requireAdmin, async (req, res) => {
   try {
-    // Supabase se actual users lane ke liye mockup/real combo structure
-    const usersList = Array.from(activeSessions.keys()).map((user, index) => ({
-      id: `usr_${index}`,
-      username: user,
-      online: true,
-      blocked: false,
-      lastLogin: new Date()
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('id, username, online, blocked, last_login');
+
+    if (error) throw error;
+
+    // Direct interface formatting data
+    const formattedUsers = users.map(u => ({
+      id: u.id,
+      username: u.username,
+      online: activeSessions.has(u.username),
+      blocked: u.blocked || false,
+      lastLogin: u.last_login
     }));
-    res.json(usersList);
+
+    res.json(formattedUsers);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch users' });
+    res.status(500).json({ error: 'Failed to fetch database users' });
   }
 });
 
 app.post('/api/admin/users', requireAdmin, async (req, res) => {
-  const { username } = req.body;
-  res.json({ ok: true, message: `User ${username} setup initialized` });
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ error: 'Credentials missing' });
+
+    const { error } = await supabase
+      .from('users')
+      .insert([{ 
+        username: username.toLowerCase().trim(), 
+        password: password.trim(),
+        blocked: false,
+        online: false
+      }]);
+
+    if (error) return res.status(400).json({ error: 'User already exists or DB schema conflict' });
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'User setup initialization failed' });
+  }
 });
 
 app.get('/api/admin/sessions', requireAdmin, (req, res) => {
@@ -130,9 +189,37 @@ app.get('/api/admin/sessions', requireAdmin, (req, res) => {
   res.json(sessions);
 });
 
-app.post('/api/admin/sessions/:username/kill', requireAdmin, (req, res) => {
+app.post('/api/admin/sessions/:username/kill', requireAdmin, async (req, res) => {
   const user = decodeURIComponent(req.params.username);
   activeSessions.delete(user);
+  
+  await supabase.from('users').update({ online: false }).eq('username', user);
+  res.json({ ok: true });
+});
+
+app.patch('/api/admin/users/:id/block', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { data: user } = await supabase.from('users').update({ blocked: true }).eq('id', id).select().single();
+  if (user) activeSessions.delete(user.username);
+  res.json({ ok: true });
+});
+
+app.patch('/api/admin/users/:id/unblock', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  await supabase.from('users').update({ blocked: false }).eq('id', id);
+  res.json({ ok: true });
+});
+
+app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  await supabase.from('users').delete().eq('id', id);
+  res.json({ ok: true });
+});
+
+app.patch('/api/admin/users/:id/password', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+  await supabase.from('users').update({ password: password.trim() }).eq('id', id);
   res.json({ ok: true });
 });
 
