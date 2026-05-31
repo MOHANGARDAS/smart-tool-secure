@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SMART-TOOL/M — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#080A10;--sf:#0F1220;--card:#141828;--border:rgba(255,255,255,0.08);--accent:#4F8EF7;--accent2:#2563EB;--teal:#00BFA5;--red:#EF4444;--green:#22C55E;--amber:#F59E0B;--t1:#EEF2FF;--t2:#7B879E;--t3:#3D4459;}
+html,body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* AUTH */
+#authWrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg);}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:360px;text-align:center;}
+.auth-logo{font-size:22px;font-weight:800;letter-spacing:3px;margin-bottom:4px;}<br>
+.auth-logo .bl{color:var(--accent);}.auth-logo .tl{color:var(--teal);}
+.auth-sub{color:var(--t2);font-size:12px;margin-bottom:24px;}
+.auth-badge{display:inline-block;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5;font-size:10px;padding:3px 10px;border-radius:20px;margin-bottom:20px;}
+.af{width:100%;background:rgba(6,8,16,0.8);border:1.5px solid var(--border);border-radius:11px;padding:13px 15px;color:var(--t1);font-size:13px;outline:none;margin-bottom:10px;font-family:'Inter',sans-serif;transition:border-color .2s;}
+.af:focus{border-color:rgba(79,142,247,0.4);}
+.ab2{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:11px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.ae{color:var(--red);font-size:11px;min-height:16px;margin-top:6px;}
+
+/* ADMIN APP */
+#adminApp{display:none;}
+nav.anav{background:rgba(8,10,16,0.92);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);}
+.anav-logo{font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;}
+.anav-logo .bl{color:var(--accent);}.anav-logo .tl{color:var(--teal);}
+.anav-badge{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#FCA5A5;font-size:10px;padding:3px 10px;border-radius:20px;}
+
+.amain{max-width:1100px;margin:0 auto;padding:28px 20px;}
+.atabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:0;}
+.atab{padding:10px 16px;font-size:12px;font-weight:600;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'Inter',sans-serif;}
+.atab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.aview{display:none;}.aview.active{display:block;}
+
+/* CARDS */
+.acard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;}
+.acard-title{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:16px;}
+
+/* Create user form */
+.cuf{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+.cf-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;}
+.cf-label{font-size:10.5px;color:var(--t2);font-weight:500;}
+.cf-inp{background:rgba(6,8,16,0.8);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--t1);font-size:12.5px;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s;width:100%;}
+.cf-inp:focus{border-color:rgba(79,142,247,0.4);}
+.cf-btn{padding:10px 18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;flex-shrink:0;}
+
+/* Table */
+.atable{width:100%;border-collapse:collapse;font-size:12px;}
+.atable th{text-align:left;padding:8px 12px;color:var(--t3);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.atable td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+.atable tr:hover td{background:rgba(255,255,255,0.02);}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;}
+.chip.online{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.2);}
+.chip.offline{background:rgba(255,255,255,0.05);color:var(--t3);}
+.chip.blocked{background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.2);}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.abtn{padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:600;cursor:pointer;border:1px solid;font-family:'Inter',sans-serif;transition:opacity .15s;}
+.abtn:hover{opacity:.8;}
+.abtn.danger{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:#FCA5A5;}
+.abtn.success{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.25);color:#4ade80;}
+.abtn.warn{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.25);color:#FCD34D;}
+.abtn.kill{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.35);color:#FCA5A5;}
+.action-group{display:flex;gap:5px;flex-wrap:wrap;}
+
+/* Sessions panel */
+.sess-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.sess-info{display:flex;flex-direction:column;gap:3px;}
+.sess-name{font-size:13px;font-weight:600;color:var(--t1);}
+.sess-time{font-size:10.5px;color:var(--t2);}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.stat-val{font-size:28px;font-weight:800;color:var(--t1);margin-bottom:2px;}
+.stat-lbl{font-size:10px;color:var(--t2);font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+
+.status-msg{font-size:11px;color:var(--teal);min-height:16px;margin-top:8px;}
+.empty{text-align:center;color:var(--t3);font-size:12px;padding:24px 0;}
+
+@media(max-width:600px){.cuf{flex-direction:column;}.cf-group{min-width:unset;}}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="authWrap">
+  <div class="auth-card">
+    <div class="auth-logo"><span class="bl">SMART</span>-TOOL/<span class="tl">M</span></div>
+    <div class="auth-sub">Administration Panel</div>
+    <div class="auth-badge">🔐 Admin Access Required</div>
+    <input class="af" type="password" id="aKey" placeholder="Admin Key" onkeydown="if(event.key==='Enter')authAdmin()"/>
+    <button class="ab2" onclick="authAdmin()">Access Admin Panel →</button>
+    <div class="ae" id="authErr"></div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <nav class="anav">
+    <div class="anav-logo"><span class="bl">SMART</span>-TOOL/<span class="tl">M</span></div>
+    <div class="anav-badge">⚡ Admin Panel</div>
+  </nav>
+  <div class="amain">
+
+    <!-- Stats -->
+    <div class="stat-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-val" id="statTotal">–</div><div class="stat-lbl">Total Users</div></div>
+      <div class="stat-card"><div class="stat-val" id="statOnline">–</div><div class="stat-lbl">Online Now</div></div>
+      <div class="stat-card"><div class="stat-val" id="statBlocked">–</div><div class="stat-lbl">Blocked</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="atabs">
+      <button class="atab active" onclick="switchTab('users')">Users</button>
+      <button class="atab" onclick="switchTab('sessions')">Live Sessions</button>
+    </div>
+
+    <!-- Users tab -->
+    <div class="aview active" id="tab-users">
+      <div class="acard">
+        <div class="acard-title">Create New User</div>
+        <div class="cuf">
+          <div class="cf-group"><label class="cf-label">Username</label><input class="cf-inp" type="text" id="newUser" placeholder="username"/></div>
+          <div class="cf-group"><label class="cf-label">Password</label><input class="cf-inp" type="password" id="newPass" placeholder="min 6 chars"/></div>
+          <button class="cf-btn" onclick="createUser()">+ Create User</button>
+        </div>
+        <div class="status-msg" id="createMsg"></div>
+      </div>
+      <div class="acard">
+        <div class="acard-title">All Users</div>
+        <div id="usersTableWrap">
+          <table class="atable">
+            <thead><tr><th>Username</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+            <tbody id="usersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sessions tab -->
+    <div class="aview" id="tab-sessions">
+      <div class="acard">
+        <div class="acard-title">Active Sessions — <span id="sessCount">0</span> online</div>
+        <div id="sessionsWrap"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+'use strict';
+var ADMIN_KEY='';
+
+function authAdmin(){
+  var k=document.getElementById('aKey').value.trim();
+  if(!k){document.getElementById('authErr').textContent='Enter admin key';return;}
+  ADMIN_KEY=k;
+  fetch('/api/admin/users',{headers:{'x-admin-key':k}})
+    .then(r=>{
+      if(!r.ok)throw new Error();
+      return r.json();
+    })
+    .then(()=>{
+      document.getElementById('authWrap').style.display='none';
+      document.getElementById('adminApp').style.display='block';
+      loadAll();
+      setInterval(loadAll,5000);
+    })
+    .catch(()=>{document.getElementById('authErr').textContent='Invalid admin key';ADMIN_KEY='';});
+}
+
+function h(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmtDate(d){if(!d)return'—';var dt=new Date(d);return dt.toLocaleDateString()+' '+dt.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});}
+
+async function loadAll(){
+  await Promise.all([loadUsers(),loadSessions()]);
+}
+
+async function loadUsers(){
+  var r=await fetch('/api/admin/users',{headers:{'x-admin-key':ADMIN_KEY}});
+  var users=await r.json();
+
+  var total=users.length, online=users.filter(u=>u.online).length, blocked=users.filter(u=>u.blocked).length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statOnline').textContent=online;
+  document.getElementById('statBlocked').textContent=blocked;
+
+  var tb=document.getElementById('usersTbody');
+  if(!users.length){tb.innerHTML='<tr><td colspan="4" class="empty">No users yet</td></tr>';return;}
+  tb.innerHTML=users.map(u=>`
+    <tr>
+      <td style="font-weight:600">${h(u.username)}</td>
+      <td>
+        ${u.blocked
+          ? '<span class="chip blocked"><span class="chip-dot"></span>Blocked</span>'
+          : u.online
+            ? '<span class="chip online"><span class="chip-dot"></span>Online</span>'
+            : '<span class="chip offline">Offline</span>'
+        }
+      </td>
+      <td style="color:var(--t2)">${fmtDate(u.lastLogin)}</td>
+      <td>
+        <div class="action-group">
+          ${u.blocked
+            ? `<button class="abtn success" onclick="unblockUser('${u._id}')">Unblock</button>`
+            : `<button class="abtn danger" onclick="blockUser('${u._id}')">Block</button>`
+          }
+          ${u.online?`<button class="abtn kill" onclick="killSession('${h(u.username)}')">Kill Session</button>`:''}
+          <button class="abtn warn" onclick="resetPassword('${u._id}','${h(u.username)}')">Reset Password</button>
+          <button class="abtn danger" onclick="deleteUser('${u._id}','${h(u.username)}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function loadSessions(){
+  var r=await fetch('/api/admin/sessions',{headers:{'x-admin-key':ADMIN_KEY}});
+  var sessions=await r.json();
+  document.getElementById('sessCount').textContent=sessions.length;
+  var wrap=document.getElementById('sessionsWrap');
+  if(!sessions.length){wrap.innerHTML='<div class="empty">No active sessions</div>';return;}
+  wrap.innerHTML=sessions.map(s=>`
+    <div class="sess-item">
+      <div class="sess-info">
+        <div class="sess-name">👤 ${h(s.username)}</div>
+        <div class="sess-time">Logged in: ${fmtDate(s.loginAt)}</div>
+      </div>
+      <button class="abtn kill" onclick="killSession('${h(s.username)}')">Force Logout</button>
+    </div>
+  `).join('');
+}
+
+async function createUser(){
+  var u=document.getElementById('newUser').value.trim();
+  var p=document.getElementById('newPass').value;
+  var msg=document.getElementById('createMsg');
+  if(!u||!p){msg.textContent='Fill all fields';msg.style.color='#FCA5A5';return;}
+  var r=await fetch('/api/admin/users',{method:'POST',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_KEY},body:JSON.stringify({username:u,password:p})});
+  var d=await r.json();
+  if(!r.ok){msg.textContent=d.error;msg.style.color='#FCA5A5';}
+  else{msg.textContent='✓ User "'+u+'" created';msg.style.color='#4ade80';document.getElementById('newUser').value='';document.getElementById('newPass').value='';loadUsers();}
+  setTimeout(()=>msg.textContent='',3000);
+}
+
+async function blockUser(id){
+  await fetch('/api/admin/users/'+id+'/block',{method:'PATCH',headers:{'x-admin-key':ADMIN_KEY}});
+  loadUsers();
+}
+async function unblockUser(id){
+  await fetch('/api/admin/users/'+id+'/unblock',{method:'PATCH',headers:{'x-admin-key':ADMIN_KEY}});
+  loadUsers();
+}
+async function killSession(username){
+  await fetch('/api/admin/sessions/'+encodeURIComponent(username)+'/kill',{method:'POST',headers:{'x-admin-key':ADMIN_KEY}});
+  loadAll();
+}
+async function deleteUser(id,username){
+  if(!confirm('Delete user "'+username+'"? This cannot be undone.'))return;
+  await fetch('/api/admin/users/'+id,{method:'DELETE',headers:{'x-admin-key':ADMIN_KEY}});
+  loadUsers();
+}
+async function resetPassword(id,username){
+  var np=prompt('New password for "'+username+'" (min 6 chars):');
+  if(!np||np.length<6){alert('Password too short');return;}
+  var r=await fetch('/api/admin/users/'+id+'/password',{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_KEY},body:JSON.stringify({password:np})});
+  alert(r.ok?'✓ Password updated':'Failed to update password');
+}
+
+function switchTab(name){
+  document.querySelectorAll('.atab').forEach((t,i)=>{t.classList.toggle('active',['users','sessions'][i]===name);});
+  document.querySelectorAll('.aview').forEach(v=>{v.classList.toggle('active',v.id==='tab-'+name);});
+  if(name==='sessions')loadSessions();
+}
+
+document.getElementById('aKey').addEventListener('keydown',e=>{if(e.key==='Enter')authAdmin();});
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

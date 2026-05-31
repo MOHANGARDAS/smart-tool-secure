@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>SMART-TOOL/M</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+/* Anti-inspect */
+*{-webkit-user-select:none;user-select:none;}
+input,textarea{-webkit-user-select:text;user-select:text;}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#080A10;--glass:rgba(16,19,30,0.75);--border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.11);--accent:#4F8EF7;--accent2:#2563EB;
+  --teal:#00BFA5;--green:#22C55E;--green2:#16A34A;--red:#EF4444;
+  --t1:#EEF2FF;--t2:#7B879E;--t3:#3D4459;
+  --btn-bg:rgba(255,255,255,0.06);--btn-border:rgba(255,255,255,0.10);
+  --btn-hover:rgba(255,255,255,0.09);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(79,142,247,0.07) 0%,transparent 65%),
+             radial-gradient(ellipse 55% 45% at 85% 85%,rgba(100,80,200,0.06) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 55% at 50% 45%,rgba(0,191,165,0.03) 0%,transparent 65%);
+  animation:amb 14s ease-in-out infinite alternate;}
+@keyframes amb{0%{opacity:1;}50%{opacity:.75;}100%{opacity:1;}}
+
+#ALB{display:none;position:fixed;top:0;left:0;right:0;z-index:9000;background:rgba(239,68,68,0.1);border-bottom:1px solid rgba(239,68,68,0.2);backdrop-filter:blur(12px);padding:10px 20px;text-align:center;font-size:12px;font-weight:500;color:#FCA5A5;}
+#ALB.on{display:block;}
+
+/* LOGIN */
+#LK{position:fixed;inset:0;z-index:8000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg);}
+.lk-logo-wrap{margin-bottom:36px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.lk-logo-svg{width:56px;height:56px;}
+.lk-wordmark{font-size:15px;font-weight:800;letter-spacing:4px;color:var(--t1);text-transform:uppercase;display:flex;align-items:center;gap:2px;}
+.lk-wordmark .wb{color:var(--accent);}.lk-wordmark .wt{color:var(--teal);}
+.lk-card{background:var(--glass);border:1px solid var(--border2);border-radius:24px;padding:36px 28px 30px;width:100%;max-width:360px;text-align:center;backdrop-filter:blur(22px);box-shadow:0 28px 70px rgba(0,0,0,0.5);position:relative;overflow:hidden;}
+.lk-card::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:100px;background:radial-gradient(ellipse,rgba(79,142,247,0.12) 0%,transparent 70%);pointer-events:none;}
+.lk-title{font-size:21px;font-weight:700;color:var(--t1);margin-bottom:6px;letter-spacing:-.4px;}
+.lk-sub{font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.5;}
+.lk-field{width:100%;background:rgba(6,8,16,0.75);border:1.5px solid rgba(255,255,255,0.10);border-radius:12px;padding:13px 16px;color:var(--t1);font-size:14px;outline:none;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;font-family:'Inter',sans-serif;}
+.lk-field::placeholder{color:var(--t3);}
+.lk-field:focus{border-color:rgba(79,142,247,0.45);box-shadow:0 0 0 4px rgba(79,142,247,0.09);}
+.lk-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px;transition:opacity .15s,box-shadow .2s;box-shadow:0 4px 18px rgba(79,142,247,0.28);font-family:'Inter',sans-serif;}
+.lk-btn:hover{opacity:.9;box-shadow:0 6px 26px rgba(79,142,247,0.4);}
+.lk-btn:active{transform:scale(.98);}
+.lk-btn:disabled{opacity:.5;cursor:not-allowed;}
+.le{color:var(--red);font-size:11.5px;min-height:18px;}
+
+/* APP */
+#AP{display:none;position:relative;z-index:1;min-height:100vh;}
+.app-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:rgba(8,10,16,0.88);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo-svg{width:28px;height:28px;}
+.nav-wordmark{font-size:14px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;display:flex;gap:1px;}
+.nav-wordmark .wb{color:var(--accent);}.nav-wordmark .ww{color:var(--t1);}.nav-wordmark .wt{color:var(--teal);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.session-chip{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.16);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;color:#4ade80;}
+.session-dot{width:6px;height:6px;background:#22C55E;border-radius:50%;animation:pdot 2s infinite;flex-shrink:0;}
+@keyframes pdot{0%,100%{opacity:1;}50%{opacity:.4;}}
+.nav-logout{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--t2);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.nav-logout:hover{background:rgba(255,255,255,0.1);}
+
+.app-main{max-width:1060px;margin:0 auto;padding:28px 20px 50px;}
+@media(min-width:768px){.app-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}.app-grid-left,.app-grid-right{display:flex;flex-direction:column;gap:16px;}}
+@media(max-width:767px){.app-grid{display:flex;flex-direction:column;gap:14px;}.app-main{padding:18px 14px 50px;}}
+
+.g-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;backdrop-filter:blur(16px);box-shadow:0 2px 20px rgba(0,0,0,0.22);overflow:hidden;}
+.g-card-header{padding:14px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
+.g-card-dot{width:3px;height:13px;border-radius:2px;flex-shrink:0;}
+.g-card-title{font-size:9.5px;font-weight:700;letter-spacing:2.5px;color:var(--t3);text-transform:uppercase;}
+.g-card-body{padding:14px 18px 18px;}
+
+.up1,.up2{position:relative;border-radius:14px;padding:26px 16px;text-align:center;cursor:pointer;transition:all .2s;overflow:hidden;}
+.up1{background:rgba(79,142,247,0.04);border:1.5px solid rgba(79,142,247,0.14);}
+.up1:hover,.up1.dv{background:rgba(79,142,247,0.08);border-color:rgba(79,142,247,0.32);}
+.up2{background:rgba(6,182,212,0.04);border:1.5px solid rgba(6,182,212,0.14);}
+.up2:hover,.up2.dv{background:rgba(6,182,212,0.08);border-color:rgba(6,182,212,0.32);}
+.up1 input,.up2 input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.up-icon{font-size:26px;margin-bottom:9px;display:block;}
+.up-title{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:4px;}
+.up-sub{font-size:11px;color:var(--t3);}
+
+.fbg{display:flex;align-items:center;gap:8px;margin-top:11px;min-height:20px;flex-wrap:wrap;}
+.fn{background:rgba(79,142,247,0.09);color:#7AAEFF;font-size:10.5px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(79,142,247,0.18);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fm{background:rgba(6,182,212,0.09);color:#5DD8E8;font-size:10.5px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(6,182,212,0.18);}
+.f0{color:var(--t3);font-size:11px;}
+
+.tool-grid{display:flex;flex-direction:column;gap:7px;}
+.btn{display:flex;align-items:center;gap:11px;width:100%;padding:12px 15px;border:1px solid var(--btn-border);border-radius:12px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--t1);text-align:left;position:relative;background:var(--btn-bg);transition:background .18s,transform .1s;font-family:'Inter',sans-serif;}
+.btn:hover{background:var(--btn-hover);transform:translateY(-1px);}
+.btn:active{transform:scale(.98);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn.bbl{border-left:2px solid rgba(79,142,247,0.55);}
+.btn.btl{border-left:2px solid rgba(0,191,165,0.55);}
+.btn.bpu{border-left:2px solid rgba(168,85,247,0.55);}
+.btn.bam{border-left:2px solid rgba(245,158,11,0.55);}
+.btn.bgr{border-left:2px solid rgba(34,197,94,0.55);}
+.btn.bcy{border-left:2px solid rgba(6,182,212,0.55);}
+.bi{font-size:15px;flex-shrink:0;opacity:.85;}.bl2x{flex:1;}.bt{font-size:8.5px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.10);color:var(--t2);letter-spacing:.8px;font-weight:600;flex-shrink:0;text-transform:uppercase;}
+
+.pg{display:none;}.pg.on{display:block;}
+.pg-status{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.sp{width:15px;height:15px;flex-shrink:0;border:2px solid rgba(255,255,255,0.07);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#ps{font-size:12.5px;font-weight:500;color:var(--t1);}
+.ptr{background:rgba(255,255,255,0.05);border-radius:99px;height:3px;overflow:hidden;margin-bottom:12px;}
+.pfl{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--teal));width:0%;transition:width .4s ease;}
+.log{background:rgba(2,4,10,0.92);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:11px 13px;font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:10px;color:rgba(120,200,120,0.85);max-height:120px;overflow-y:auto;line-height:1.8;word-break:break-all;box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);}
+.log::-webkit-scrollbar{width:2px;}.log::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+
+.rs{display:none;}.rs.on{display:block;animation:fadeUp .35s cubic-bezier(.16,1,.3,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.rs-inner{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.18);border-radius:14px;padding:18px;}
+.rt{font-size:14px;font-weight:700;color:#4ade80;margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.rm{color:var(--t2);font-size:11px;margin-bottom:16px;}
+.ar{display:flex;gap:9px;}
+.ab{flex:1;padding:12px;border:none;border-radius:11px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s,transform .12s;font-family:'Inter',sans-serif;}
+.ab:hover{opacity:.88;}.ab:active{transform:scale(.98);}
+.adl{background:linear-gradient(135deg,rgba(34,197,94,0.3),rgba(22,163,74,0.4));border:1px solid rgba(34,197,94,0.4);color:#4ade80;}
+.ash{background:rgba(79,142,247,0.15);border:1px solid rgba(79,142,247,0.3);color:#7AAEFF;}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(14,18,32,0.96);border:1px solid var(--border2);color:var(--t1);padding:9px 18px;border-radius:99px;font-size:12px;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,0.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;z-index:99999;white-space:nowrap;pointer-events:none;backdrop-filter:blur(16px);}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<div id="ALB">⚠️ Session expiring in <span id="ALT"></span></div>
+
+<!-- LOGIN -->
+<div id="LK">
+  <div class="lk-logo-wrap">
+    <svg class="lk-logo-svg" viewBox="0 0 56 56" fill="none">
+      <rect width="56" height="56" rx="16" fill="url(#a1)"/>
+      <rect x="0.5" y="0.5" width="55" height="55" rx="15.5" stroke="url(#a2)" stroke-opacity="0.4"/>
+      <path d="M14 28C14 20.268 20.268 14 28 14C35.732 14 42 20.268 42 28" stroke="url(#a3)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M19 28C19 23.029 23.029 19 28 19C32.971 19 37 23.029 37 28" stroke="url(#a4)" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
+      <circle cx="28" cy="30" r="5" fill="url(#a5)"/>
+      <circle cx="28" cy="30" r="2.2" fill="#080A10"/>
+      <defs>
+        <linearGradient id="a1" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#0F1525"/><stop offset="1" stop-color="#0A0E1A"/></linearGradient>
+        <linearGradient id="a2" x1="0" y1="0" x2="56" y2="56"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></linearGradient>
+        <linearGradient id="a3" x1="14" y1="14" x2="42" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
+        <linearGradient id="a4" x1="19" y1="19" x2="37" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#00BFA5"/><stop offset="1" stop-color="#4F8EF7"/></linearGradient>
+        <radialGradient id="a5" cx="50%" cy="50%" r="50%"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></radialGradient>
+      </defs>
+    </svg>
+    <div class="lk-wordmark"><span class="wb">SMART</span><span>-TOOL/</span><span class="wt">M</span></div>
+  </div>
+  <div class="lk-card">
+    <div class="lk-title">Welcome Back</div>
+    <div class="lk-sub">Sign in to your account</div>
+    <input class="lk-field" type="text" id="uname" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('pass').focus()"/>
+    <input class="lk-field" type="password" id="pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="lk-btn" id="loginBtn" onclick="doLogin()">Sign In →</button>
+    <div class="le" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="AP">
+  <nav class="app-nav">
+    <div class="nav-logo">
+      <svg class="nav-logo-svg" viewBox="0 0 56 56" fill="none">
+        <rect width="56" height="56" rx="14" fill="url(#b1)"/>
+        <path d="M14 28C14 20.268 20.268 14 28 14C35.732 14 42 20.268 42 28" stroke="url(#b2)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M19 28C19 23.029 23.029 19 28 19C32.971 19 37 23.029 37 28" stroke="url(#b3)" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/>
+        <circle cx="28" cy="30" r="5" fill="url(#b4)"/><circle cx="28" cy="30" r="2.2" fill="#080A10"/>
+        <defs>
+          <linearGradient id="b1" x1="0" y1="0" x2="56" y2="56"><stop stop-color="#0F1525"/><stop offset="1" stop-color="#0A0E1A"/></linearGradient>
+          <linearGradient id="b2" x1="14" y1="14" x2="42" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
+          <linearGradient id="b3" x1="19" y1="19" x2="37" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#00BFA5"/><stop offset="1" stop-color="#4F8EF7"/></linearGradient>
+          <radialGradient id="b4" cx="50%" cy="50%" r="50%"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></radialGradient>
+        </defs>
+      </svg>
+      <div class="nav-wordmark"><span class="wb">SMART</span><span class="ww">-TOOL/</span><span class="wt">M</span></div>
+    </div>
+    <div class="nav-right">
+      <div class="session-chip"><span class="session-dot"></span><span id="uLabel">Secure Session</span></div>
+      <button class="nav-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="app-main">
+    <div class="app-grid">
+      <div class="app-grid-left">
+        <div class="g-card">
+          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">File Input</span></div>
+          <div class="g-card-body">
+            <div class="up1" id="ua"><input type="file" id="fi" accept=".pdf,.xlsx,.xls,.xlsm,.xlsb,.csv"/>
+              <span class="up-icon">☁️</span><div class="up-title">Upload File</div><div class="up-sub">PDF · Excel · CSV — drag or tap</div>
+            </div>
+            <div class="fbg"><span class="f0" id="fl">No file selected</span></div>
+          </div>
+        </div>
+
+        <div class="g-card">
+          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(6,182,212,0.7);"></div><span class="g-card-title">E-Way Bill Tool</span></div>
+          <div class="g-card-body">
+            <div class="up2" id="ua2"><input type="file" id="efi" accept=".pdf" multiple/>
+              <span class="up-icon">📂</span><div class="up-title">Select Multiple PDFs</div><div class="up-sub">Batch upload · drag or tap</div>
+            </div>
+            <div class="fbg"><span class="f0" id="el">No files selected</span></div>
+            <div class="tool-grid" style="margin-top:13px;">
+              <button class="btn bcy" onclick="runEW()"><span class="bi">🚚</span><span class="bl2x">E-Way Bill Merge (2 Copies)</span><span class="bt">PDF</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-card pg" id="pg">
+          <div class="g-card-header"><div class="g-card-dot" style="background:var(--accent);animation:pdot 1.2s infinite;"></div><span class="g-card-title">Processing</span></div>
+          <div class="g-card-body">
+            <div class="pg-status"><div class="sp"></div><span id="ps">Processing…</span></div>
+            <div class="ptr"><div class="pfl" id="pf"></div></div>
+            <div class="log" id="lg"></div>
+          </div>
+        </div>
+
+        <div class="rs" id="rs">
+          <div class="rs-inner">
+            <div class="rt">✅ Process Complete</div>
+            <div class="rm" id="rm"></div>
+            <div class="ar">
+              <button class="ab adl" id="bDl">💾 Save As</button>
+              <button class="ab ash" id="bSh">↗ Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-grid-right">
+        <div class="g-card">
+          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">PDF Tools</span></div>
+          <div class="g-card-body">
+            <div class="tool-grid">
+              <button class="btn bbl" onclick="R('3c')"><span class="bi">📄</span><span class="bl2x">3 Copies Single PDF</span><span class="bt">PDF</span></button>
+              <button class="btn btl" onclick="R('iz')"><span class="bi">🗂</span><span class="bl2x">Invoice-wise PDF + ZIP</span><span class="bt">PDF</span></button>
+              <button class="btn bpu" onclick="R('ie')"><span class="bi">🛒</span><span class="bl2x">Invoice-wise PDF + ZIP Ecom</span><span class="bt">PDF</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="g-card">
+          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(34,197,94,0.7);"></div><span class="g-card-title">Excel Tools</span></div>
+          <div class="g-card-body">
+            <div class="tool-grid">
+              <button class="btn bam" onclick="R('et')"><span class="bi">📊</span><span class="bl2x">Invoice Number Expander TRPT</span><span class="bt">XLS</span></button>
+              <button class="btn bgr" onclick="R('em')"><span class="bi">🔀</span><span class="bl2x">Multi-Sheet Merger + NP Tagger</span><span class="bt">XLS</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="TST"></div>
+
+<script>
+(function(){
+'use strict';
+
+// Anti-debug (basic)
+(function shield(){
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+  document.addEventListener('keydown',e=>{
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U'))e.preventDefault();
+  });
+})();
+
+// ── AUTH ──────────────────────────────────────────────────
+var currentUser=null, oBlob=null, oName='', sF=null, eF=null;
+var AL_MS=3600000, WN_MS=3300000, _lT=0, _wTmr=null, _lTmr=null;
+
+async function doLogin(){
+  var uname=document.getElementById('uname').value.trim();
+  var pass=document.getElementById('pass').value;
+  if(!uname||!pass){document.getElementById('loginErr').textContent='Enter username and password';return;}
+  var btn=document.getElementById('loginBtn');
+  btn.disabled=true;btn.textContent='Signing in…';
+  document.getElementById('loginErr').textContent='';
+  try{
+    var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:uname,password:pass}),credentials:'include'});
+    var d=await r.json();
+    if(!r.ok){document.getElementById('loginErr').textContent=d.error||'Login failed';return;}
+    currentUser=d.username;
+    document.getElementById('LK').style.display='none';
+    document.getElementById('AP').style.display='block';
+    document.getElementById('uLabel').textContent=d.username;
+    startAutoLogout();
+  }catch(e){document.getElementById('loginErr').textContent='Network error';}
+  finally{btn.disabled=false;btn.textContent='Sign In →';}
+}
+
+async function doLogout(){
+  try{await fetch('/api/logout',{method:'POST',credentials:'include'});}catch(e){}
+  clearTimeout(_wTmr);clearTimeout(_lTmr);_lT=0;
+  sF=null;eF=null;oBlob=null;currentUser=null;
+  document.getElementById('AP').style.display='none';
+  document.getElementById('LK').style.display='flex';
+  document.getElementById('uname').value='';
+  document.getElementById('pass').value='';
+  document.getElementById('loginErr').textContent='';
+  off('pg');off('rs');
+}
+
+function startAutoLogout(){
+  if(_lT>0)return; _lT=Date.now();
+  _wTmr=setTimeout(function(){
+    document.getElementById('ALB').classList.add('on');
+    var s=300;
+    var wd=setInterval(function(){s--;document.getElementById('ALT').textContent=s+'s';if(s<=0)clearInterval(wd);},1000);
+  },WN_MS);
+  _lTmr=setTimeout(doLogout,AL_MS);
+}
+
+// Check session on load
+fetch('/api/me',{credentials:'include'})
+  .then(r=>r.ok?r.json():null)
+  .then(d=>{
+    if(d&&d.username){
+      currentUser=d.username;
+      document.getElementById('LK').style.display='none';
+      document.getElementById('AP').style.display='block';
+      document.getElementById('uLabel').textContent=d.username;
+      startAutoLogout();
+    }
+  }).catch(()=>{});
+
+// ── SAVE AS ───────────────────────────────────────────────
+function saveBlob(blob,filename){
+  if(window.showSaveFilePicker){
+    var ext=filename.split('.').pop().toLowerCase();
+    var types=[{
+      description:ext==='pdf'?'PDF File':ext==='zip'?'ZIP Archive':'Excel File',
+      accept:ext==='pdf'?{'application/pdf':['.pdf']}:ext==='zip'?{'application/zip':['.zip']}:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}
+    }];
+    window.showSaveFilePicker({suggestedName:filename,types:types})
+      .then(fh=>fh.createWritable())
+      .then(w=>w.write(blob).then(()=>w))
+      .then(w=>w.close())
+      .then(()=>toast('✓ File saved!'))
+      .catch(e=>{if(e.name!=='AbortError')fallbackSave(blob,filename);});
+  } else {fallbackSave(blob,filename);}
+}
+function fallbackSave(blob,filename){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
+  toast('✓ Download started!');
+}
+
+// ── FILE UPLOAD ───────────────────────────────────────────
+var fi=document.getElementById('fi'),ua=document.getElementById('ua');
+fi.addEventListener('change',e=>{if(e.target.files[0])setS(e.target.files[0]);});
+ua.addEventListener('dragover',e=>{e.preventDefault();ua.classList.add('dv');});
+ua.addEventListener('dragleave',()=>ua.classList.remove('dv'));
+ua.addEventListener('drop',e=>{e.preventDefault();ua.classList.remove('dv');if(e.dataTransfer.files[0])setS(e.dataTransfer.files[0]);});
+function setS(f){sF=f;oBlob=null;off('rs');off('pg');document.getElementById('fl').outerHTML='<span class="fn" id="fl">📎 '+f.name+'</span>';toast('Loaded: '+f.name);}
+
+var efi=document.getElementById('efi'),ua2=document.getElementById('ua2');
+efi.addEventListener('change',e=>{if(e.target.files.length)setE(e.target.files);});
+ua2.addEventListener('dragover',e=>{e.preventDefault();ua2.classList.add('dv');});
+ua2.addEventListener('dragleave',()=>ua2.classList.remove('dv'));
+ua2.addEventListener('drop',e=>{e.preventDefault();ua2.classList.remove('dv');var p=Array.from(e.dataTransfer.files).filter(f=>f.name.toLowerCase().endsWith('.pdf'));if(p.length)setE(p);else toast('PDF files only','err');});
+function setE(files){eF=Array.from(files).filter(f=>f.name.toLowerCase().endsWith('.pdf'));oBlob=null;off('rs');off('pg');var l=document.getElementById('el');l.outerHTML=eF.length===1?'<span class="fn" id="el">📎 '+eF[0].name+'</span>':'<span class="fm" id="el">📚 '+eF.length+' files selected</span>';toast(eF.length+' PDFs loaded');}
+
+// ── RUN (sends to server) ─────────────────────────────────
+async function R(t){
+  if(!sF){toast('Upload a file first','err');return;}
+  var n=sF.name.toLowerCase();
+  if(['3c','iz','ie'].includes(t)&&!n.endsWith('.pdf')){toast('This tool requires a PDF','err');return;}
+  if(['et','em'].includes(t)&&!/\.(xlsx|xls|xlsm|xlsb|csv)$/.test(n)){toast('This tool requires an Excel file','err');return;}
+  setAllBtns(true);rst();on('pg');off('rs');sp(10);
+  try{
+    ss('Uploading & processing…');
+    var fd=new FormData();fd.append('file',sF);
+    var r=await fetch('/api/process/'+t,{method:'POST',body:fd,credentials:'include'});
+    if(r.status===401){doLogout();return;}
+    if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
+    sp(80);ss('Receiving output…');
+    var blob=await r.blob();
+    var cd=r.headers.get('content-disposition')||'';
+    var m=cd.match(/filename="([^"]+)"/);
+    oBlob=blob;oName=m?m[1]:(t==='ew'?'EwayBill.pdf':t==='et'?'TRPT_output.xlsx':t==='em'?'Merged_NP.xlsx':t==='3c'?'3Copies.pdf':'Invoices.zip');
+    sp(100);setTimeout(()=>{off('pg');showRes();},380);
+  }catch(e){off('pg');toast('Error: '+e.message,'err');console.error(e);}
+  finally{setAllBtns(false);}
+}
+
+async function runEW(){
+  if(!eF||!eF.length){toast('Select PDF files first','err');return;}
+  setAllBtns(true);rst();on('pg');off('rs');sp(5);
+  try{
+    ss('Uploading '+eF.length+' PDFs…');lg('Files: '+eF.length);
+    var fd=new FormData();eF.forEach(f=>fd.append('files',f));
+    var r=await fetch('/api/process/ew',{method:'POST',body:fd,credentials:'include'});
+    if(r.status===401){doLogout();return;}
+    if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
+    sp(90);ss('Receiving output…');
+    var blob=await r.blob();
+    var cd=r.headers.get('content-disposition')||'';
+    var m=cd.match(/filename="([^"]+)"/);
+    oBlob=blob;oName=m?m[1]:'EwayBill_merged.pdf';
+    sp(100);setTimeout(()=>{off('pg');showRes();},380);
+  }catch(e){off('pg');toast('Error: '+e.message,'err');}
+  finally{setAllBtns(false);}
+}
+
+function setAllBtns(disabled){
+  document.querySelectorAll('.btn').forEach(b=>b.disabled=disabled);
+}
+
+// ── SAVE + SHARE ──────────────────────────────────────────
+document.getElementById('bDl').onclick=function(){if(!oBlob){toast('No output yet','err');return;}saveBlob(oBlob,oName);};
+document.getElementById('bSh').onclick=async function(){
+  if(!oBlob){toast('No output yet','err');return;}
+  if(navigator.canShare){
+    var file=new File([oBlob],oName,{type:oBlob.type});
+    try{if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'SMART-TOOL/M'});return;}}
+    catch(e){if(e.name==='AbortError')return;}
+  }
+  saveBlob(oBlob,oName);
+};
+
+// ── UI HELPERS ────────────────────────────────────────────
+function on(id){document.getElementById(id).classList.add('on');}
+function off(id){document.getElementById(id).classList.remove('on');}
+function ss(m){document.getElementById('ps').textContent=m;}
+function sp(p){document.getElementById('pf').style.width=Math.min(p,100)+'%';}
+function lg(m){var b=document.getElementById('lg');b.innerHTML+=m+'<br>';b.scrollTop=b.scrollHeight;}
+function rst(){document.getElementById('lg').innerHTML='';sp(0);ss('Processing…');}
+function showRes(){
+  on('rs');var sz=oBlob?oBlob.size:0;
+  var lb=sz>1048576?(sz/1048576).toFixed(2)+' MB':(sz/1024).toFixed(1)+' KB';
+  document.getElementById('rm').textContent=oName+' · '+lb;
+  document.getElementById('rs').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toast(msg,type){
+  var el=document.getElementById('TST');el.textContent=msg;
+  el.style.borderColor=type==='err'?'rgba(239,68,68,0.35)':'rgba(255,255,255,0.1)';
+  el.classList.add('on');setTimeout(()=>el.classList.remove('on'),3000);
+}
+
+window.doLogin=doLogin;window.doLogout=doLogout;window.R=R;window.runEW=runEW;
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
