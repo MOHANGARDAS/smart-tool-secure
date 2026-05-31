@@ -18,7 +18,7 @@ const JSZip          = require('jszip');
 // ── CONFIGURATION ─────────────────────────────────────────
 const PORT       = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'smarttool-master-secret-786';
-const ADMIN_KEY  = process.env.ADMIN_KEY || 'admin-master-key-change-me';
+const ADMIN_KEY  = process.env.ADMIN_KEY || '1121';
 
 // Supabase URL aur Anon Key connection string se bypass karne ke liye variable handler
 const SUPABASE_URL = process.env.DATABASE_URL ? process.env.DATABASE_URL.split('@')[1]?.split('/')[0] : null;
