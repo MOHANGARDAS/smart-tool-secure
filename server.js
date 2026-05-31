@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════
-// SMART-TOOL/M — Secure Backend Server (Fixed Version)
+// SMART-TOOL/M — Secure Backend Server (Fixed Auth Version)
 // ═══════════════════════════════════════════════════════════
 'use strict';
 
@@ -28,6 +28,8 @@ const app = express();
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: true, credentials: true }));
+
+// Body parsers ko upar rakhna zaroori hai taaki form data parse ho sake
 app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 
@@ -36,6 +38,7 @@ const apiLimiter   = rateLimit({ windowMs: 60*1000, max: 30, message: { error: '
 
 app.use(express.static(__dirname));
 
+// Multer settings sirf file process route ke liye use karenge
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 500 * 1024 * 1024 }
@@ -59,17 +62,22 @@ async function requireAuth(req, res, next) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// FIXED USER & ADMIN LOGIN ROUTES (BINA DB KE INSTANT LOGIN)
+// FIXED LOGIN ROUTES (SUPPORT ALL FORM TYPES)
 // ═══════════════════════════════════════════════════════════
 
-// 1. Normal User Portal Login (`/`)
-app.post('/api/login', loginLimiter, async (req, res) => {
+// 1. Normal User Portal Login (`/`) - Handled cleanly without Multer locks
+app.post('/api/login', loginLimiter, upload.none(), async (req, res) => {
   try {
     const { username, password } = req.body;
+    
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username and password required' });
+    }
+
     const inputUser = username.toLowerCase().trim();
     const inputPass = password.trim();
 
-    // 🔒 FIXED LOGIN LOCK: Username 'mohan' aur Password '1121' par set hai
+    // 🔒 FIXED HARDCODED LOGIN LOCK
     if (inputUser === 'mohan' && inputPass === '1121') {
       const token = jwt.sign({ username: inputUser }, JWT_SECRET, { expiresIn: '1h' });
       activeSessions.set(inputUser, token);
@@ -78,14 +86,13 @@ app.post('/api/login', loginLimiter, async (req, res) => {
 
     return res.status(401).json({ error: 'Invalid Username or Password' });
   } catch (e) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server auth system failure' });
   }
 });
 
 // 2. Admin Panel Login (`/admin`)
-app.post('/api/admin/login', (req, res) => {
+app.post('/api/admin/login', upload.none(), (req, res) => {
   const { adminKey } = req.body;
-  // Agar headers me key nahi hai toh body se check karega (Form submit support)
   const keyToCheck = adminKey || req.headers['x-admin-key'];
 
   if (keyToCheck === ADMIN_KEY) {
@@ -99,7 +106,7 @@ app.post('/api/logout', requireAuth, (req, res) => {
   res.json({ ok: true });
 });
 
-// Mock endpoints for frontend compatibility
+// Mock endpoints frontend display sync ke liye
 app.get('/api/admin/users', (req, res) => res.json([{ id: '1', username: 'mohan', online: true, blocked: false }]));
 app.post('/api/admin/users', (req, res) => res.json({ ok: true }));
 app.get('/api/admin/sessions', (req, res) => res.json([]));
@@ -118,7 +125,7 @@ app.post('/api/process/:tool', requireAuth, apiLimiter, upload.fields([{ name: '
   }
 });
 
-// Routing paths
+// HTML paths
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'SMART-TOOL-M (1).html')));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'SMART-TOOL-M (1).html')));
