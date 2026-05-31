@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "pdf-lib": "^1.17.1",
     "xlsx": "^0.18.5",
     "jszip": "^3.10.1",
