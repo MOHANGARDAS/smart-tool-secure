@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="theme-color" content="#080A10"/>
 <title>SMART-TOOL/M</title>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="icon" type="image/png" href="/icons/icon-192.png"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-/* Anti-inspect */
-*{-webkit-user-select:none;user-select:none;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;}
 input,textarea{-webkit-user-select:text;user-select:text;}
-
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
   --bg:#080A10;--glass:rgba(16,19,30,0.75);--border:rgba(255,255,255,0.07);
   --border2:rgba(255,255,255,0.11);--accent:#4F8EF7;--accent2:#2563EB;
@@ -28,9 +29,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   animation:amb 14s ease-in-out infinite alternate;}
 @keyframes amb{0%{opacity:1;}50%{opacity:.75;}100%{opacity:1;}}
 
-#ALB{display:none;position:fixed;top:0;left:0;right:0;z-index:9000;background:rgba(239,68,68,0.1);border-bottom:1px solid rgba(239,68,68,0.2);backdrop-filter:blur(12px);padding:10px 20px;text-align:center;font-size:12px;font-weight:500;color:#FCA5A5;}
-#ALB.on{display:block;}
-
 /* LOGIN */
 #LK{position:fixed;inset:0;z-index:8000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg);}
 .lk-logo-wrap{margin-bottom:36px;display:flex;flex-direction:column;align-items:center;gap:10px;}
@@ -45,28 +43,34 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .lk-field::placeholder{color:var(--t3);}
 .lk-field:focus{border-color:rgba(79,142,247,0.45);box-shadow:0 0 0 4px rgba(79,142,247,0.09);}
 .lk-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px;transition:opacity .15s,box-shadow .2s;box-shadow:0 4px 18px rgba(79,142,247,0.28);font-family:'Inter',sans-serif;}
-.lk-btn:hover{opacity:.9;box-shadow:0 6px 26px rgba(79,142,247,0.4);}
-.lk-btn:active{transform:scale(.98);}
-.lk-btn:disabled{opacity:.5;cursor:not-allowed;}
+.lk-btn:hover{opacity:.9;}.lk-btn:active{transform:scale(.98);}.lk-btn:disabled{opacity:.5;cursor:not-allowed;}
 .le{color:var(--red);font-size:11.5px;min-height:18px;}
 
 /* APP */
 #AP{display:none;position:relative;z-index:1;min-height:100vh;}
-.app-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:rgba(8,10,16,0.88);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
+.app-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(8,10,16,0.88);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
 .nav-logo{display:flex;align-items:center;gap:10px;}
 .nav-logo-svg{width:28px;height:28px;}
 .nav-wordmark{font-size:14px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;display:flex;gap:1px;}
 .nav-wordmark .wb{color:var(--accent);}.nav-wordmark .ww{color:var(--t1);}.nav-wordmark .wt{color:var(--teal);}
-.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-right{display:flex;align-items:center;gap:8px;}
 .session-chip{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.16);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;color:#4ade80;}
 .session-dot{width:6px;height:6px;background:#22C55E;border-radius:50%;animation:pdot 2s infinite;flex-shrink:0;}
 @keyframes pdot{0%,100%{opacity:1;}50%{opacity:.4;}}
-.nav-logout{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--t2);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
-.nav-logout:hover{background:rgba(255,255,255,0.1);}
+.nav-ic{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--t2);padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;}
+.nav-ic:hover{background:rgba(255,255,255,0.1);color:var(--t1);}
 
-.app-main{max-width:1060px;margin:0 auto;padding:28px 20px 50px;}
+.tabbar{max-width:1060px;margin:0 auto;padding:18px 20px 0;display:flex;gap:8px;}
+.tab{background:var(--btn-bg);border:1px solid var(--btn-border);color:var(--t2);padding:9px 16px;border-radius:12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s;display:flex;align-items:center;gap:7px;}
+.tab:hover{background:var(--btn-hover);color:var(--t1);}
+.tab.on{background:linear-gradient(135deg,rgba(79,142,247,0.18),rgba(0,191,165,0.12));border-color:rgba(79,142,247,0.4);color:var(--t1);}
+
+.app-main{max-width:1060px;margin:0 auto;padding:16px 20px 60px;}
+.view{display:none;}.view.on{display:block;animation:fadeUp .3s cubic-bezier(.16,1,.3,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
 @media(min-width:768px){.app-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}.app-grid-left,.app-grid-right{display:flex;flex-direction:column;gap:16px;}}
-@media(max-width:767px){.app-grid{display:flex;flex-direction:column;gap:14px;}.app-main{padding:18px 14px 50px;}}
+@media(max-width:767px){.app-grid{display:flex;flex-direction:column;gap:14px;}}
 
 .g-card{background:var(--glass);border:1px solid var(--border);border-radius:18px;backdrop-filter:blur(16px);box-shadow:0 2px 20px rgba(0,0,0,0.22);overflow:hidden;}
 .g-card-header{padding:14px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;}
@@ -83,12 +87,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .up-icon{font-size:26px;margin-bottom:9px;display:block;}
 .up-title{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:4px;}
 .up-sub{font-size:11px;color:var(--t3);}
-
 .fbg{display:flex;align-items:center;gap:8px;margin-top:11px;min-height:20px;flex-wrap:wrap;}
 .fn{background:rgba(79,142,247,0.09);color:#7AAEFF;font-size:10.5px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(79,142,247,0.18);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .fm{background:rgba(6,182,212,0.09);color:#5DD8E8;font-size:10.5px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid rgba(6,182,212,0.18);}
 .f0{color:var(--t3);font-size:11px;}
-
 .tool-grid{display:flex;flex-direction:column;gap:7px;}
 .btn{display:flex;align-items:center;gap:11px;width:100%;padding:12px 15px;border:1px solid var(--btn-border);border-radius:12px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--t1);text-align:left;position:relative;background:var(--btn-bg);transition:background .18s,transform .1s;font-family:'Inter',sans-serif;}
 .btn:hover{background:var(--btn-hover);transform:translateY(-1px);}
@@ -100,7 +102,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .btn.bam{border-left:2px solid rgba(245,158,11,0.55);}
 .btn.bgr{border-left:2px solid rgba(34,197,94,0.55);}
 .btn.bcy{border-left:2px solid rgba(6,182,212,0.55);}
-.bi{font-size:15px;flex-shrink:0;opacity:.85;}.bl2x{flex:1;}.bt{font-size:8.5px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.10);color:var(--t2);letter-spacing:.8px;font-weight:600;flex-shrink:0;text-transform:uppercase;}
+.bi{font-size:15px;flex-shrink:0;opacity:.85;}.bl2x{flex:1;}
+.bt{font-size:8.5px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.10);color:var(--t2);letter-spacing:.8px;font-weight:600;flex-shrink:0;text-transform:uppercase;}
 
 .pg{display:none;}.pg.on{display:block;}
 .pg-status{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
@@ -110,10 +113,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .ptr{background:rgba(255,255,255,0.05);border-radius:99px;height:3px;overflow:hidden;margin-bottom:12px;}
 .pfl{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--teal));width:0%;transition:width .4s ease;}
 .log{background:rgba(2,4,10,0.92);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:11px 13px;font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:10px;color:rgba(120,200,120,0.85);max-height:120px;overflow-y:auto;line-height:1.8;word-break:break-all;box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);}
-.log::-webkit-scrollbar{width:2px;}.log::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
-
 .rs{display:none;}.rs.on{display:block;animation:fadeUp .35s cubic-bezier(.16,1,.3,1);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 .rs-inner{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.18);border-radius:14px;padding:18px;}
 .rt{font-size:14px;font-weight:700;color:#4ade80;margin-bottom:3px;display:flex;align-items:center;gap:7px;}
 .rm{color:var(--t2);font-size:11px;margin-bottom:16px;}
@@ -123,13 +123,74 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .adl{background:linear-gradient(135deg,rgba(34,197,94,0.3),rgba(22,163,74,0.4));border:1px solid rgba(34,197,94,0.4);color:#4ade80;}
 .ash{background:rgba(79,142,247,0.15);border:1px solid rgba(79,142,247,0.3);color:#7AAEFF;}
 
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(14,18,32,0.96);border:1px solid var(--border2);color:var(--t1);padding:9px 18px;border-radius:99px;font-size:12px;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,0.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;z-index:99999;white-space:nowrap;pointer-events:none;backdrop-filter:blur(16px);}
+/* ── AI ASSISTANT ── */
+.ai-wrap{display:flex;flex-direction:column;min-height:460px;}
+.ai-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2);flex-wrap:wrap;}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0;}
+.ai-dot.ready{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,0.7);}
+.ai-chat{flex:1;overflow-y:auto;padding:4px 2px;display:flex;flex-direction:column;gap:12px;min-height:180px;max-height:340px;}
+.ai-chat::-webkit-scrollbar{width:4px;}.ai-chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+.msg{max-width:88%;padding:10px 14px;border-radius:14px;font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;animation:fadeUp .25s ease;}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-bottom-right-radius:4px;}
+.msg.bot{align-self:flex-start;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--t1);border-bottom-left-radius:4px;}
+.msg.sys{align-self:center;background:transparent;color:var(--t3);font-size:11px;text-align:center;padding:2px;}
+
+.plan-card{align-self:stretch;background:rgba(8,11,20,0.6);border:1px solid var(--border2);border-radius:14px;overflow:hidden;margin-top:12px;}
+.plan-head{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.plan-title{font-size:12px;font-weight:700;color:var(--t1);}
+.plan-sum{font-size:11.5px;color:var(--t2);padding:10px 14px;border-bottom:1px solid var(--border);}
+.plan-file{padding:11px 14px;border-bottom:1px solid var(--border);}
+.plan-file:last-child{border-bottom:none;}
+.pf-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.pf-path{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t1);word-break:break-all;}
+.badge{font-size:9px;font-weight:700;letter-spacing:.6px;padding:2px 8px;border-radius:20px;text-transform:uppercase;flex-shrink:0;}
+.badge.create{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.25);}
+.badge.update{background:rgba(79,142,247,0.12);color:#7AAEFF;border:1px solid rgba(79,142,247,0.25);}
+.badge.delete{background:rgba(239,68,68,0.12);color:#FCA5A5;border:1px solid rgba(239,68,68,0.25);}
+.diff{background:rgba(2,4,10,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:10px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:10px;line-height:1.7;max-height:200px;overflow:auto;padding:9px 11px;white-space:pre-wrap;word-break:break-all;}
+.diff::-webkit-scrollbar{width:3px;}.diff::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);}
+.dline{display:block;padding:0 4px;border-radius:3px;}
+.d-add{background:rgba(34,197,94,0.08);color:#86efac;}
+.d-del{background:rgba(239,68,68,0.08);color:#fca5a5;}
+.d-hdr{color:var(--t3);}
+
+.ai-inputbar{display:flex;gap:8px;align-items:flex-end;padding-top:12px;}
+.ai-input{flex:1;background:rgba(6,8,16,0.75);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px;color:var(--t1);font-size:13px;outline:none;resize:none;font-family:'Inter',sans-serif;min-height:44px;max-height:140px;line-height:1.5;}
+.ai-input:focus{border-color:rgba(79,142,247,0.45);box-shadow:0 0 0 4px rgba(79,142,247,0.09);}
+.ai-mic,.ai-send{width:46px;height:46px;border-radius:14px;border:1px solid var(--border2);background:var(--btn-bg);color:var(--t1);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.ai-mic:hover,.ai-send:hover{background:var(--btn-hover);}
+.ai-send{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;}
+.ai-mic.listening{background:linear-gradient(135deg,rgba(239,68,68,0.5),rgba(220,38,38,0.6));border-color:rgba(239,68,68,0.5);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4);}50%{box-shadow:0 0 0 12px rgba(239,68,68,0);}}
+.pushbar{display:flex;gap:8px;margin-top:10px;}
+.pushbtn{flex:1;padding:13px;border-radius:12px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .12s;}
+.pushbtn:hover{opacity:.9;}.pushbtn:active{transform:scale(.98);}.pushbtn:disabled{opacity:.45;cursor:not-allowed;}
+.pb-go{background:linear-gradient(135deg,rgba(34,197,94,0.4),rgba(22,163,74,0.5));border:1px solid rgba(34,197,94,0.5);color:#4ade80;}
+.pb-cancel{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--t2);}
+
+/* ── SETTINGS ── */
+.settings-grid{display:flex;flex-direction:column;gap:14px;}
+.sfield label{display:block;font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase;}
+.sfield input,.sfield select{width:100%;background:rgba(6,8,16,0.75);border:1.5px solid rgba(255,255,255,0.1);border-radius:11px;padding:11px 14px;color:var(--t1);font-size:13px;outline:none;font-family:'Inter',sans-serif;}
+.sfield input:focus,.sfield select:focus{border-color:rgba(79,142,247,0.45);}
+.sfield select option{background:#0a0e1a;color:var(--t1);}
+.shelp{font-size:10.5px;color:var(--t3);margin-top:5px;line-height:1.5;}
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.srow{grid-template-columns:1fr;}}
+
+.modal{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal.on{display:flex;}
+.modal-card{background:var(--glass);border:1px solid var(--border2);border-radius:22px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:26px;backdrop-filter:blur(22px);box-shadow:0 30px 80px rgba(0,0,0,0.6);}
+.modal-card::-webkit-scrollbar{width:4px;}.modal-card::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);}
+.m-title{font-size:18px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:9px;}
+.m-sub{font-size:12px;color:var(--t2);margin-bottom:18px;line-height:1.5;}
+.m-close{margin-left:auto;background:rgba(255,255,255,0.06);border:1px solid var(--border2);color:var(--t2);width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:16px;}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(14,18,32,0.96);border:1px solid var(--border2);color:var(--t1);padding:10px 18px;border-radius:99px;font-size:12px;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,0.5);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;z-index:99999;max-width:90vw;text-align:center;pointer-events:none;backdrop-filter:blur(16px);}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
 </style>
 </head>
 <body>
-
-<div id="ALB">⚠️ Session expiring in <span id="ALT"></span></div>
 
 <!-- LOGIN -->
 <div id="LK">
@@ -149,7 +210,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <radialGradient id="a5" cx="50%" cy="50%" r="50%"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></radialGradient>
       </defs>
     </svg>
-    <div class="lk-wordmark"><span class="wb">SMART</span><span>-TOOL/</span><span class="wt">M</span></div>
+    <div class="lk-wordmark"><span class="wb">SMART</span>-TOOL/<span class="wt">M</span></div>
   </div>
   <div class="lk-card">
     <div class="lk-title">Welcome Back</div>
@@ -171,7 +232,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <path d="M19 28C19 23.029 23.029 19 28 19C32.971 19 37 23.029 37 28" stroke="url(#b3)" stroke-width="2" stroke-linecap="round" stroke-opacity="0.55"/>
         <circle cx="28" cy="30" r="5" fill="url(#b4)"/><circle cx="28" cy="30" r="2.2" fill="#080A10"/>
         <defs>
-          <linearGradient id="b1" x1="0" y1="0" x2="56" y2="56"><stop stop-color="#0F1525"/><stop offset="1" stop-color="#0A0E1A"/></linearGradient>
+          <linearGradient id="b1" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#0F1525"/><stop offset="1" stop-color="#0A0E1A"/></linearGradient>
           <linearGradient id="b2" x1="14" y1="14" x2="42" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
           <linearGradient id="b3" x1="19" y1="19" x2="37" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#00BFA5"/><stop offset="1" stop-color="#4F8EF7"/></linearGradient>
           <radialGradient id="b4" cx="50%" cy="50%" r="50%"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></radialGradient>
@@ -181,78 +242,226 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
     <div class="nav-right">
       <div class="session-chip"><span class="session-dot"></span><span id="uLabel">Secure Session</span></div>
-      <button class="nav-logout" onclick="doLogout()">Sign Out</button>
+      <button class="nav-ic" onclick="openSettings()">⚙ Settings</button>
+      <button class="nav-ic" onclick="doLogout()">Sign Out</button>
     </div>
   </nav>
 
+  <div class="tabbar">
+    <button class="tab on" data-view="vTools" onclick="showView('vTools')">🛠 Tools</button>
+    <button class="tab" data-view="vAnalyze" onclick="showView('vAnalyze')">📁 AI Analysis</button>
+    <button class="tab" data-view="vAI" onclick="showView('vAI')">🤖 AI Assistant</button>
+  </div>
+
   <div class="app-main">
-    <div class="app-grid">
-      <div class="app-grid-left">
-        <div class="g-card">
-          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">File Input</span></div>
-          <div class="g-card-body">
-            <div class="up1" id="ua"><input type="file" id="fi" accept=".pdf,.xlsx,.xls,.xlsm,.xlsb,.csv"/>
-              <span class="up-icon">☁️</span><div class="up-title">Upload File</div><div class="up-sub">PDF · Excel · CSV — drag or tap</div>
+    <!-- TOOLS VIEW -->
+    <div class="view on" id="vTools">
+      <div class="app-grid">
+        <div class="app-grid-left">
+          <div class="g-card">
+            <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">File Input</span></div>
+            <div class="g-card-body">
+              <div class="up1" id="ua"><input type="file" id="fi" accept=".pdf,.xlsx,.xls,.xlsm,.xlsb,.csv"/>
+                <span class="up-icon">☁️</span><div class="up-title">Upload File</div><div class="up-sub">PDF · Excel · CSV — drag or tap</div>
+              </div>
+              <div class="fbg"><span class="f0" id="fl">No file selected</span></div>
             </div>
-            <div class="fbg"><span class="f0" id="fl">No file selected</span></div>
+          </div>
+
+          <div class="g-card">
+            <div class="g-card-header"><div class="g-card-dot" style="background:rgba(6,182,212,0.7);"></div><span class="g-card-title">E-Way Bill Tool</span></div>
+            <div class="g-card-body">
+              <div class="up2" id="ua2"><input type="file" id="efi" accept=".pdf" multiple/>
+                <span class="up-icon">📂</span><div class="up-title">Select Multiple PDFs</div><div class="up-sub">Batch upload · drag or tap</div>
+              </div>
+              <div class="fbg"><span class="f0" id="el">No files selected</span></div>
+              <div class="tool-grid" style="margin-top:13px;">
+                <button class="btn bcy" onclick="runEW()"><span class="bi">🚚</span><span class="bl2x">E-Way Bill Merge (2 Copies)</span><span class="bt">PDF</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="g-card pg" id="pg">
+            <div class="g-card-header"><div class="g-card-dot" style="background:var(--accent);animation:pdot 1.2s infinite;"></div><span class="g-card-title">Processing</span></div>
+            <div class="g-card-body">
+              <div class="pg-status"><div class="sp"></div><span id="ps">Processing…</span></div>
+              <div class="ptr"><div class="pfl" id="pf"></div></div>
+              <div class="log" id="lg"></div>
+            </div>
+          </div>
+
+          <div class="rs" id="rs">
+            <div class="rs-inner">
+              <div class="rt">✅ Process Complete</div>
+              <div class="rm" id="rm"></div>
+              <div class="ar">
+                <button class="ab adl" id="bDl">💾 Save As</button>
+                <button class="ab ash" id="bSh">↗ Share</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="g-card">
-          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(6,182,212,0.7);"></div><span class="g-card-title">E-Way Bill Tool</span></div>
-          <div class="g-card-body">
-            <div class="up2" id="ua2"><input type="file" id="efi" accept=".pdf" multiple/>
-              <span class="up-icon">📂</span><div class="up-title">Select Multiple PDFs</div><div class="up-sub">Batch upload · drag or tap</div>
+        <div class="app-grid-right">
+          <div class="g-card">
+            <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">PDF Tools</span></div>
+            <div class="g-card-body">
+              <div class="tool-grid">
+                <button class="btn bbl" onclick="R('3c')"><span class="bi">📄</span><span class="bl2x">3 Copies Single PDF</span><span class="bt">PDF</span></button>
+                <button class="btn btl" onclick="R('iz')"><span class="bi">🗂</span><span class="bl2x">Invoice-wise PDF + ZIP</span><span class="bt">PDF</span></button>
+                <button class="btn bpu" onclick="R('ie')"><span class="bi">🛒</span><span class="bl2x">Invoice-wise PDF + ZIP Ecom</span><span class="bt">PDF</span></button>
+              </div>
             </div>
-            <div class="fbg"><span class="f0" id="el">No files selected</span></div>
-            <div class="tool-grid" style="margin-top:13px;">
-              <button class="btn bcy" onclick="runEW()"><span class="bi">🚚</span><span class="bl2x">E-Way Bill Merge (2 Copies)</span><span class="bt">PDF</span></button>
+          </div>
+          <div class="g-card">
+            <div class="g-card-header"><div class="g-card-dot" style="background:rgba(34,197,94,0.7);"></div><span class="g-card-title">Excel Tools</span></div>
+            <div class="g-card-body">
+              <div class="tool-grid">
+                <button class="btn bam" onclick="R('et')"><span class="bi">📊</span><span class="bl2x">Invoice Number Expander TRPT</span><span class="bt">XLS</span></button>
+                <button class="btn bgr" onclick="R('em')"><span class="bi">🔀</span><span class="bl2x">Multi-Sheet Merger + NP Tagger</span><span class="bt">XLS</span></button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="g-card pg" id="pg">
-          <div class="g-card-header"><div class="g-card-dot" style="background:var(--accent);animation:pdot 1.2s infinite;"></div><span class="g-card-title">Processing</span></div>
-          <div class="g-card-body">
-            <div class="pg-status"><div class="sp"></div><span id="ps">Processing…</span></div>
-            <div class="ptr"><div class="pfl" id="pf"></div></div>
-            <div class="log" id="lg"></div>
+    <!-- AI ANALYSIS VIEW -->
+    <div class="view" id="vAnalyze">
+      <div class="g-card">
+        <div class="g-card-header">
+          <div class="g-card-dot" style="background:var(--teal);"></div><span class="g-card-title">AI File Analysis</span>
+        </div>
+        <div class="g-card-body">
+          <div class="up2" id="uaA" style="border-radius:14px;">
+            <input type="file" id="afi" multiple/>
+            <span class="up-icon">📂</span><div class="up-title">Upload Files</div><div class="up-sub">PDF · Excel · CSV · Text · Image — koi bhi</div>
+          </div>
+          <div class="fbg"><span class="f0" id="afl">No files selected</span></div>
+
+          <div class="sfield" style="margin-top:14px;">
+            <label>Instruction (kya karna hai?)</label>
+            <textarea id="aInst" style="width:100%;background:rgba(6,8,16,0.75);border:1.5px solid rgba(255,255,255,0.1);border-radius:11px;padding:12px 14px;color:var(--t1);font-size:13px;outline:none;resize:vertical;min-height:64px;font-family:'Inter',sans-serif;" placeholder="e.g. is data me total sales nikaal ke Excel banado / ye PDF summarize karo / in dono files ko compare karke text report do"></textarea>
+          </div>
+
+          <div class="sfield" style="margin-top:12px;">
+            <label>Output Format</label>
+            <select id="aFmt">
+              <option value="none">Sirf answer (text)</option>
+              <option value="text">Text file (.txt)</option>
+              <option value="pdf">PDF</option>
+              <option value="csv">CSV</option>
+              <option value="xlsx">Excel (.xlsx)</option>
+            </select>
+          </div>
+
+          <button class="lk-btn" id="aBtn" onclick="analyzeFiles()" style="margin-top:14px;">🔍 Analyze</button>
+
+          <div id="aResult" style="display:none;margin-top:16px;">
+            <div class="g-card">
+              <div class="g-card-header"><div class="g-card-dot" style="background:var(--green);"></div><span class="g-card-title">Result</span></div>
+              <div class="g-card-body">
+                <div class="log" id="aText" style="max-height:280px;color:rgba(200,200,220,0.9);white-space:pre-wrap;"></div>
+                <div id="aDlWrap" style="margin-top:12px;"></div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="rs" id="rs">
-          <div class="rs-inner">
-            <div class="rt">✅ Process Complete</div>
-            <div class="rm" id="rm"></div>
-            <div class="ar">
-              <button class="ab adl" id="bDl">💾 Save As</button>
-              <button class="ab ash" id="bSh">↗ Share</button>
+    <!-- AI VIEW -->
+    <div class="view" id="vAI">
+      <div class="g-card" style="margin-bottom:16px;">
+        <div class="g-card-header">
+          <div class="g-card-dot" style="background:var(--teal);"></div><span class="g-card-title">AI Repo Assistant</span>
+          <span class="ai-status" style="margin-left:auto;">
+            <span class="ai-dot" id="aiDot"></span><span id="aiStatus">checking…</span>
+          </span>
+        </div>
+        <div class="g-card-body">
+          <div class="ai-wrap">
+            <div class="ai-chat" id="aiChat">
+              <div class="msg sys">👋 Speak or type a change — e.g. "add a rule that rejects files larger than 100MB" or "change the login so password needs 8 characters". I'll show you the plan, you confirm, and I'll push it to your repo.</div>
+            </div>
+            <div id="aiPlan"></div>
+            <div class="ai-inputbar">
+              <textarea class="ai-input" id="aiInput" placeholder="Describe the change… (or tap 🎤 to speak)" rows="1"></textarea>
+              <button class="ai-mic" id="micBtn" title="Speak">🎤</button>
+              <button class="ai-send" id="sendBtn" title="Send">➤</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="app-grid-right">
-        <div class="g-card">
-          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(79,142,247,0.7);"></div><span class="g-card-title">PDF Tools</span></div>
-          <div class="g-card-body">
-            <div class="tool-grid">
-              <button class="btn bbl" onclick="R('3c')"><span class="bi">📄</span><span class="bl2x">3 Copies Single PDF</span><span class="bt">PDF</span></button>
-              <button class="btn btl" onclick="R('iz')"><span class="bi">🗂</span><span class="bl2x">Invoice-wise PDF + ZIP</span><span class="bt">PDF</span></button>
-              <button class="btn bpu" onclick="R('ie')"><span class="bi">🛒</span><span class="bl2x">Invoice-wise PDF + ZIP Ecom</span><span class="bt">PDF</span></button>
+      <!-- MEMORY / RULES -->
+      <div class="g-card">
+        <div class="g-card-header">
+          <div class="g-card-dot" style="background:#A855F7;"></div><span class="g-card-title">🧠 Memory / Rules</span>
+          <span style="margin-left:auto;display:flex;gap:6px;">
+            <button class="nav-ic" onclick="loadMemory()" title="Refresh">↻ Refresh</button>
+          </span>
+        </div>
+        <div class="g-card-body">
+          <div id="memoryBox" class="log" style="max-height:200px;color:rgba(120,200,120,0.85);">Loading rules…</div>
+          <div class="shelp" style="margin-top:8px;">Rules yahan <b>SMARTTOOL_RULES.md</b> file me save hote hain (repo me). Ye permanent memory hai — AI har request me ise padhta hai aur jab tum naya rule bologe to update karta hai (bina duplicate banaye).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="modal-card">
+    <div class="m-title">⚙ Settings <button class="m-close" onclick="closeSettings()">✕</button></div>
+    <div class="m-sub">Configure the AI engine and your GitHub connection. Secrets are stored on the server only.</div>
+    <div class="settings-grid">
+      <div class="g-card">
+        <div class="g-card-header"><div class="g-card-dot" style="background:var(--teal);"></div><span class="g-card-title">AI Engine</span></div>
+        <div class="g-card-body">
+          <div class="srow">
+            <div class="sfield">
+              <label>Provider</label>
+              <select id="sProvider">
+                <option value="gemini">Google Gemini (free)</option>
+                <option value="openai">OpenAI / compatible</option>
+              </select>
+            </div>
+            <div class="sfield">
+              <label>Model</label>
+              <input type="text" id="sModel" placeholder="gemini-2.0-flash"/>
             </div>
           </div>
-        </div>
-        <div class="g-card">
-          <div class="g-card-header"><div class="g-card-dot" style="background:rgba(34,197,94,0.7);"></div><span class="g-card-title">Excel Tools</span></div>
-          <div class="g-card-body">
-            <div class="tool-grid">
-              <button class="btn bam" onclick="R('et')"><span class="bi">📊</span><span class="bl2x">Invoice Number Expander TRPT</span><span class="bt">XLS</span></button>
-              <button class="btn bgr" onclick="R('em')"><span class="bi">🔀</span><span class="bl2x">Multi-Sheet Merger + NP Tagger</span><span class="bt">XLS</span></button>
-            </div>
+          <div class="sfield" style="margin-top:12px;">
+            <label>API Key</label>
+            <input type="password" id="sApiKey" placeholder="Paste your free API key"/>
+            <div class="shelp" id="sKeyHelp">Get a free key at aistudio.google.com — no card needed.</div>
+          </div>
+          <div class="sfield" style="margin-top:12px;">
+            <label>Base URL (OpenAI-compatible only, optional)</label>
+            <input type="text" id="sBaseUrl" placeholder="https://api.openai.com/v1"/>
           </div>
         </div>
       </div>
+
+      <div class="g-card">
+        <div class="g-card-header"><div class="g-card-dot" style="background:var(--accent);"></div><span class="g-card-title">GitHub Repository</span></div>
+        <div class="g-card-body">
+          <div class="srow">
+            <div class="sfield"><label>Owner</label><input type="text" id="sOwner" placeholder="MOHANGARDAS"/></div>
+            <div class="sfield"><label>Repo</label><input type="text" id="sRepo" placeholder="smart-tool-secure"/></div>
+          </div>
+          <div class="sfield" style="margin-top:12px;"><label>Branch</label><input type="text" id="sBranch" placeholder="main"/></div>
+          <div class="sfield" style="margin-top:12px;">
+            <label>Personal Access Token</label>
+            <input type="password" id="sToken" placeholder="ghp_…"/>
+            <div class="shelp">Needs <b>Contents: Read &amp; Write</b> scope. Create at github.com → Settings → Developer settings → Tokens.</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="lk-btn" onclick="saveSettings()">💾 Save Settings</button>
     </div>
   </div>
 </div>
@@ -263,18 +472,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 (function(){
 'use strict';
 
-// Anti-debug (basic)
-(function shield(){
-  document.addEventListener('contextmenu',e=>e.preventDefault());
-  document.addEventListener('keydown',e=>{
-    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U'))e.preventDefault();
-  });
-})();
+var token = localStorage.getItem('stm_token') || '';
+var currentUser = null;
+var oBlob=null, oName='', sF=null, eF=null;
 
-// ── AUTH ──────────────────────────────────────────────────
-var currentUser=null, oBlob=null, oName='', sF=null, eF=null;
-var AL_MS=3600000, WN_MS=3300000, _lT=0, _wTmr=null, _lTmr=null;
+function authHeaders(h){ h = h || {}; if(token) h['Authorization'] = 'Bearer '+token; return h; }
 
+// ── AUTH ──────────────────────────────────────────────────────
 async function doLogin(){
   var uname=document.getElementById('uname').value.trim();
   var pass=document.getElementById('pass').value;
@@ -283,93 +487,66 @@ async function doLogin(){
   btn.disabled=true;btn.textContent='Signing in…';
   document.getElementById('loginErr').textContent='';
   try{
-    var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:uname,password:pass}),credentials:'include'});
+    var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:uname,password:pass})});
     var d=await r.json();
     if(!r.ok){document.getElementById('loginErr').textContent=d.error||'Login failed';return;}
+    token=d.token; localStorage.setItem('stm_token',token);
     currentUser=d.username;
-    document.getElementById('LK').style.display='none';
-    document.getElementById('AP').style.display='block';
-    document.getElementById('uLabel').textContent=d.username;
-    startAutoLogout();
+    enterApp();
   }catch(e){document.getElementById('loginErr').textContent='Network error';}
   finally{btn.disabled=false;btn.textContent='Sign In →';}
 }
 
+function enterApp(){
+  document.getElementById('LK').style.display='none';
+  document.getElementById('AP').style.display='block';
+  document.getElementById('uLabel').textContent=currentUser;
+  refreshAIStatus();
+}
+
 async function doLogout(){
-  try{await fetch('/api/logout',{method:'POST',credentials:'include'});}catch(e){}
-  clearTimeout(_wTmr);clearTimeout(_lTmr);_lT=0;
-  sF=null;eF=null;oBlob=null;currentUser=null;
+  try{await fetch('/api/logout',{method:'POST',headers:authHeaders()});}catch(e){}
+  token=''; localStorage.removeItem('stm_token'); currentUser=null;
   document.getElementById('AP').style.display='none';
   document.getElementById('LK').style.display='flex';
-  document.getElementById('uname').value='';
-  document.getElementById('pass').value='';
-  document.getElementById('loginErr').textContent='';
-  off('pg');off('rs');
+  document.getElementById('uname').value=''; document.getElementById('pass').value='';
 }
 
-function startAutoLogout(){
-  if(_lT>0)return; _lT=Date.now();
-  _wTmr=setTimeout(function(){
-    document.getElementById('ALB').classList.add('on');
-    var s=300;
-    var wd=setInterval(function(){s--;document.getElementById('ALT').textContent=s+'s';if(s<=0)clearInterval(wd);},1000);
-  },WN_MS);
-  _lTmr=setTimeout(doLogout,AL_MS);
+if(token){
+  fetch('/api/me',{headers:authHeaders()})
+    .then(r=>r.ok?r.json():null)
+    .then(d=>{ if(d&&d.username){currentUser=d.username;enterApp();} else {doLogout();} })
+    .catch(()=>{});
 }
 
-// Check session on load
-fetch('/api/me',{credentials:'include'})
-  .then(r=>r.ok?r.json():null)
-  .then(d=>{
-    if(d&&d.username){
-      currentUser=d.username;
-      document.getElementById('LK').style.display='none';
-      document.getElementById('AP').style.display='block';
-      document.getElementById('uLabel').textContent=d.username;
-      startAutoLogout();
-    }
-  }).catch(()=>{});
-
-// ── SAVE AS ───────────────────────────────────────────────
-function saveBlob(blob,filename){
-  if(window.showSaveFilePicker){
-    var ext=filename.split('.').pop().toLowerCase();
-    var types=[{
-      description:ext==='pdf'?'PDF File':ext==='zip'?'ZIP Archive':'Excel File',
-      accept:ext==='pdf'?{'application/pdf':['.pdf']}:ext==='zip'?{'application/zip':['.zip']}:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}
-    }];
-    window.showSaveFilePicker({suggestedName:filename,types:types})
-      .then(fh=>fh.createWritable())
-      .then(w=>w.write(blob).then(()=>w))
-      .then(w=>w.close())
-      .then(()=>toast('✓ File saved!'))
-      .catch(e=>{if(e.name!=='AbortError')fallbackSave(blob,filename);});
-  } else {fallbackSave(blob,filename);}
-}
-function fallbackSave(blob,filename){
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download=filename;
-  document.body.appendChild(a);a.click();
-  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
-  toast('✓ Download started!');
+function showView(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.getElementById(v).classList.add('on');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.view===v));
+  if(v==='vAI') loadMemory();
 }
 
-// ── FILE UPLOAD ───────────────────────────────────────────
+// ── FILE TOOLS ───────────────────────────────────────────────
 var fi=document.getElementById('fi'),ua=document.getElementById('ua');
 fi.addEventListener('change',e=>{if(e.target.files[0])setS(e.target.files[0]);});
-ua.addEventListener('dragover',e=>{e.preventDefault();ua.classList.add('dv');});
-ua.addEventListener('dragleave',()=>ua.classList.remove('dv'));
-ua.addEventListener('drop',e=>{e.preventDefault();ua.classList.remove('dv');if(e.dataTransfer.files[0])setS(e.dataTransfer.files[0]);});
+['dragover','dragleave','drop'].forEach(ev=>ua.addEventListener(ev,e=>{
+  if(ev==='dragover'){e.preventDefault();ua.classList.add('dv');}
+  else if(ev==='dragleave'){ua.classList.remove('dv');}
+  else{e.preventDefault();ua.classList.remove('dv');if(e.dataTransfer.files[0])setS(e.dataTransfer.files[0]);}
+}));
 function setS(f){sF=f;oBlob=null;off('rs');off('pg');document.getElementById('fl').outerHTML='<span class="fn" id="fl">📎 '+f.name+'</span>';toast('Loaded: '+f.name);}
 
 var efi=document.getElementById('efi'),ua2=document.getElementById('ua2');
 efi.addEventListener('change',e=>{if(e.target.files.length)setE(e.target.files);});
-ua2.addEventListener('dragover',e=>{e.preventDefault();ua2.classList.add('dv');});
-ua2.addEventListener('dragleave',()=>ua2.classList.remove('dv'));
-ua2.addEventListener('drop',e=>{e.preventDefault();ua2.classList.remove('dv');var p=Array.from(e.dataTransfer.files).filter(f=>f.name.toLowerCase().endsWith('.pdf'));if(p.length)setE(p);else toast('PDF files only','err');});
+['dragover','dragleave','drop'].forEach(ev=>ua2.addEventListener(ev,e=>{
+  if(ev==='dragover'){e.preventDefault();ua2.classList.add('dv');}
+  else if(ev==='dragleave'){ua2.classList.remove('dv');}
+  else{e.preventDefault();ua2.classList.remove('dv');var p=Array.from(e.dataTransfer.files).filter(f=>f.name.toLowerCase().endsWith('.pdf'));if(p.length)setE(p);else toast('PDF files only','err');}
+}));
 function setE(files){eF=Array.from(files).filter(f=>f.name.toLowerCase().endsWith('.pdf'));oBlob=null;off('rs');off('pg');var l=document.getElementById('el');l.outerHTML=eF.length===1?'<span class="fn" id="el">📎 '+eF[0].name+'</span>':'<span class="fm" id="el">📚 '+eF.length+' files selected</span>';toast(eF.length+' PDFs loaded');}
 
-// ── RUN (sends to server) ─────────────────────────────────
+function setAllBtns(d){document.querySelectorAll('#vTools .btn').forEach(b=>b.disabled=d);}
+
 async function R(t){
   if(!sF){toast('Upload a file first','err');return;}
   var n=sF.name.toLowerCase();
@@ -379,7 +556,7 @@ async function R(t){
   try{
     ss('Uploading & processing…');
     var fd=new FormData();fd.append('file',sF);
-    var r=await fetch('/api/process/'+t,{method:'POST',body:fd,credentials:'include'});
+    var r=await fetch('/api/process/'+t,{method:'POST',body:fd,headers:authHeaders()});
     if(r.status===401){doLogout();return;}
     if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
     sp(80);ss('Receiving output…');
@@ -398,7 +575,7 @@ async function runEW(){
   try{
     ss('Uploading '+eF.length+' PDFs…');lg('Files: '+eF.length);
     var fd=new FormData();eF.forEach(f=>fd.append('files',f));
-    var r=await fetch('/api/process/ew',{method:'POST',body:fd,credentials:'include'});
+    var r=await fetch('/api/process/ew',{method:'POST',body:fd,headers:authHeaders()});
     if(r.status===401){doLogout();return;}
     if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
     sp(90);ss('Receiving output…');
@@ -411,23 +588,34 @@ async function runEW(){
   finally{setAllBtns(false);}
 }
 
-function setAllBtns(disabled){
-  document.querySelectorAll('.btn').forEach(b=>b.disabled=disabled);
-}
-
-// ── SAVE + SHARE ──────────────────────────────────────────
 document.getElementById('bDl').onclick=function(){if(!oBlob){toast('No output yet','err');return;}saveBlob(oBlob,oName);};
 document.getElementById('bSh').onclick=async function(){
   if(!oBlob){toast('No output yet','err');return;}
   if(navigator.canShare){
     var file=new File([oBlob],oName,{type:oBlob.type});
-    try{if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'SMART-TOOL/M'});return;}}
-    catch(e){if(e.name==='AbortError')return;}
+    try{if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'SMART-TOOL/M'});return;}}catch(e){if(e.name==='AbortError')return;}
   }
   saveBlob(oBlob,oName);
 };
 
-// ── UI HELPERS ────────────────────────────────────────────
+function saveBlob(blob,filename){
+  if(window.showSaveFilePicker){
+    var ext=filename.split('.').pop().toLowerCase();
+    var types=[{description:ext==='pdf'?'PDF File':ext==='zip'?'ZIP Archive':'Excel File',accept:ext==='pdf'?{'application/pdf':['.pdf']}:ext==='zip'?{'application/zip':['.zip']}:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}];
+    window.showSaveFilePicker({suggestedName:filename,types:types})
+      .then(fh=>fh.createWritable()).then(w=>w.write(blob).then(()=>w)).then(w=>w.close())
+      .then(()=>toast('✓ File saved!')).catch(e=>{if(e.name!=='AbortError')fallbackSave(blob,filename);});
+  } else fallbackSave(blob,filename);
+}
+function fallbackSave(blob,filename){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
+  toast('✓ Download started!');
+}
+
+// ── UI HELPERS ───────────────────────────────────────────────
 function on(id){document.getElementById(id).classList.add('on');}
 function off(id){document.getElementById(id).classList.remove('on');}
 function ss(m){document.getElementById('ps').textContent=m;}
@@ -438,7 +626,6 @@ function showRes(){
   on('rs');var sz=oBlob?oBlob.size:0;
   var lb=sz>1048576?(sz/1048576).toFixed(2)+' MB':(sz/1024).toFixed(1)+' KB';
   document.getElementById('rm').textContent=oName+' · '+lb;
-  document.getElementById('rs').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function toast(msg,type){
   var el=document.getElementById('TST');el.textContent=msg;
@@ -446,9 +633,289 @@ function toast(msg,type){
   el.classList.add('on');setTimeout(()=>el.classList.remove('on'),3000);
 }
 
-window.doLogin=doLogin;window.doLogout=doLogout;window.R=R;window.runEW=runEW;
+// ── AI ASSISTANT ─────────────────────────────────────────────
+var aiHistory=[]; var lastPlan=null; var aiBusy=false;
+
+async function refreshAIStatus(){
+  var dot=document.getElementById('aiDot'), st=document.getElementById('aiStatus');
+  if(!token){dot.className='ai-dot';st.textContent='sign in';return;}
+  try{
+    var r=await fetch('/api/ai/settings',{headers:authHeaders()});
+    if(!r.ok){dot.className='ai-dot';st.textContent='unavailable';return;}
+    var d=await r.json();
+    var parts=[];
+    if(d.ai.hasKey) parts.push('AI ✓'); else parts.push('AI key missing');
+    if(d.github.hasToken) parts.push(d.github.owner+'/'+d.github.repo+'@'+d.github.branch); else parts.push('GitHub not linked');
+    st.textContent=parts.join(' · ');
+    dot.className='ai-dot'+(d.ai.hasKey&&d.github.hasToken?' ready':'');
+  }catch(e){dot.className='ai-dot';st.textContent='offline';}
+}
+
+async function loadMemory(){
+  var box=document.getElementById('memoryBox');
+  if(!token){box.textContent='Sign in first.';return;}
+  box.textContent='Loading rules…';
+  try{
+    var r=await fetch('/api/ai/memory',{headers:authHeaders()});
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||'load failed');
+    if(!d.exists){
+      box.textContent='(koi rule abhi saved nahi hai — jab bologe "rule add karo…" to yahan save hoga)';
+      box.style.color='rgba(120,200,120,0.6)';
+    } else {
+      box.textContent=d.content;
+      box.style.color='rgba(120,200,120,0.85)';
+    }
+  }catch(e){
+    box.textContent='⚠️ '+e.message;
+    box.style.color='#FCA5A5';
+  }
+}
+
+function addMsg(text, cls){
+  var c=document.getElementById('aiChat');
+  var d=document.createElement('div');d.className='msg '+cls;d.textContent=text;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+  return d;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function simpleDiff(before, after){
+  var b=(before||'').split('\n'), a=(after||'').split('\n');
+  var html='';
+  for(var i=0;i<b.length;i++){ html+='<span class="dline d-del">- '+esc(b[i])+'</span>'; }
+  for(var j=0;j<a.length;j++){ html+='<span class="dline d-add">+ '+esc(a[j])+'</span>'; }
+  if(!b.length&&!a.length) html='<span class="d-hdr">(empty)</span>';
+  return html;
+}
+
+function renderPlan(plan){
+  var box=document.getElementById('aiPlan');
+  box.innerHTML='';
+  if(!plan){return;}
+  var changes=(plan.changes||[]).filter(c=>c && c.path);
+  var card=document.createElement('div');card.className='plan-card';
+  var head=document.createElement('div');head.className='plan-head';
+  head.innerHTML='<span class="plan-title">📝 Proposed changes</span>';
+  if(changes.length) head.innerHTML+='<span class="badge update">'+changes.length+' file'+(changes.length>1?'s':'')+'</span>';
+  else head.innerHTML+='<span class="badge create">no changes</span>';
+  card.appendChild(head);
+  if(plan.summary){var s=document.createElement('div');s.className='plan-sum';s.textContent=plan.summary;card.appendChild(s);}
+  changes.forEach(function(c){
+    var f=document.createElement('div');f.className='plan-file';
+    var top=document.createElement('div');top.className='pf-top';
+    var badge=c.action==='delete'?'delete':c.action==='create'?'create':'update';
+    top.innerHTML='<span class="badge '+badge+'">'+badge+'</span><span class="pf-path">'+esc(c.path)+'</span>';
+    f.appendChild(top);
+    var d=document.createElement('div');d.className='diff';
+    if(c.action==='delete'){ d.innerHTML='<span class="d-hdr">file will be deleted</span>'; }
+    else if(c.action==='create'){ d.innerHTML='<span class="d-hdr">new file</span>'+simpleDiff('',c.content); }
+    else { d.innerHTML=simpleDiff(c.before,c.content); }
+    f.appendChild(d);
+    card.appendChild(f);
+  });
+  if(changes.length){
+    var pb=document.createElement('div');pb.className='pushbar';
+    pb.innerHTML='<button class="pushbtn pb-cancel" onclick="discardPlan()">✕ Discard</button>'+
+                 '<button class="pushbtn pb-go" id="pushBtn" onclick="confirmPush()">🚀 Confirm &amp; Push to GitHub</button>';
+    card.appendChild(pb);
+  }
+  box.appendChild(card);
+}
+
+function discardPlan(){ lastPlan=null; document.getElementById('aiPlan').innerHTML=''; }
+
+async function sendAI(text){
+  if(!text||aiBusy) return;
+  if(!token){toast('Sign in first','err');return;}
+  aiBusy=true;
+  addMsg(text,'user');
+  document.getElementById('aiInput').value='';
+  var typing=addMsg('🤖 Thinking…','sys');
+  try{
+    var r=await fetch('/api/ai/assist',{method:'POST',headers:authHeaders({'Content-Type':'application/json'}),body:JSON.stringify({prompt:text,history:aiHistory})});
+    if(r.status===401){doLogout();return;}
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||'AI error');
+    typing.remove();
+    lastPlan=d.plan;
+    if(d.plan && d.plan.changes && d.plan.changes.length){
+      addMsg(d.plan.summary||'Here is my plan.','bot');
+      renderPlan(d.plan);
+    } else {
+      addMsg((d.plan&&d.plan.summary)||'No file changes needed.','bot');
+      if(d.plan && d.plan.raw){addMsg(d.plan.raw,'sys');}
+    }
+    aiHistory.push({role:'user',content:text});
+    aiHistory.push({role:'assistant',content:d.plan&&d.plan.summary?d.plan.summary:''});
+  }catch(e){
+    typing.remove();
+    addMsg('⚠️ '+e.message,'bot');
+  }finally{ aiBusy=false; }
+}
+
+async function confirmPush(){
+  if(!lastPlan || !lastPlan.changes || !lastPlan.changes.length){toast('Nothing to push','err');return;}
+  var btn=document.getElementById('pushBtn');
+  btn.disabled=true;btn.textContent='⏳ Pushing…';
+  try{
+    var r=await fetch('/api/ai/apply',{method:'POST',headers:authHeaders({'Content-Type':'application/json'}),body:JSON.stringify({changes:lastPlan.changes,summary:lastPlan.summary})});
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||'Push failed');
+    addMsg('✅ Pushed! Commit: '+d.commit+'\n'+d.url,'bot');
+    discardPlan();
+    loadMemory();
+    toast('✓ Pushed to GitHub');
+  }catch(e){
+    addMsg('❌ Push failed: '+e.message,'bot');
+    btn.disabled=false;btn.textContent='🚀 Confirm & Push to GitHub';
+  }
+}
+
+document.getElementById('sendBtn').onclick=function(){sendAI(document.getElementById('aiInput').value.trim());};
+var aiInput=document.getElementById('aiInput');
+aiInput.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAI(aiInput.value.trim());}
+  autoGrow();
+});
+function autoGrow(){ var t=aiInput;t.style.height='auto';t.style.height=Math.min(t.scrollHeight,140)+'px'; }
+
+// Voice input (Web Speech API)
+var rec=null, listening=false;
+var micBtn=document.getElementById('micBtn');
+if(window.SpeechRecognition||window.webkitSpeechRecognition){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  rec=new SR();
+  rec.lang='en-IN';
+  rec.continuous=false; rec.interimResults=true;
+  var finalText='';
+  rec.onresult=function(e){
+    var interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) finalText+=e.results[i][0].transcript;
+      else interim+=e.results[i][0].transcript;
+    }
+    aiInput.value=(finalText+' '+interim).trim();
+    autoGrow();
+  };
+  rec.onend=function(){
+    listening=false; micBtn.classList.remove('listening'); micBtn.textContent='🎤';
+    if(finalText.trim()){ sendAI(finalText.trim()); finalText=''; }
+  };
+  rec.onerror=function(){ listening=false;micBtn.classList.remove('listening');micBtn.textContent='🎤';finalText=''; };
+  micBtn.onclick=function(){
+    if(listening){ rec.stop(); return; }
+    finalText='';
+    try{
+      rec.start(); listening=true; micBtn.classList.add('listening'); micBtn.textContent='⏹';
+      toast('Listening… speak now');
+    }catch(e){ toast('Mic unavailable: '+e.message,'err'); }
+  };
+} else {
+  micBtn.style.opacity='.4'; micBtn.title='Voice not supported in this browser';
+  micBtn.onclick=function(){ toast('Voice input needs Chrome/Edge','err'); };
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────
+async function openSettings(){
+  document.getElementById('settingsModal').classList.add('on');
+  try{
+    var r=await fetch('/api/ai/settings',{headers:authHeaders()});
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||'err');
+    document.getElementById('sProvider').value=d.ai.provider||'gemini';
+    document.getElementById('sModel').value=d.ai.model||'';
+    document.getElementById('sBaseUrl').value=d.ai.baseUrl||'';
+    document.getElementById('sOwner').value=d.github.owner||'';
+    document.getElementById('sRepo').value=d.github.repo||'';
+    document.getElementById('sBranch').value=d.github.branch||'';
+    document.getElementById('sApiKey').placeholder=d.ai.hasKey?'(key saved — enter to replace)':'Paste your free API key';
+    document.getElementById('sToken').placeholder=d.github.hasToken?'(token saved — enter to replace)':'ghp_…';
+  }catch(e){}
+}
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('on'); }
+async function saveSettings(){
+  var body={ai:{provider:document.getElementById('sProvider').value,model:document.getElementById('sModel').value.trim(),baseUrl:document.getElementById('sBaseUrl').value.trim(),apiKey:document.getElementById('sApiKey').value.trim()},
+            github:{owner:document.getElementById('sOwner').value.trim(),repo:document.getElementById('sRepo').value.trim(),branch:document.getElementById('sBranch').value.trim(),token:document.getElementById('sToken').value.trim()}};
+  try{
+    var r=await fetch('/api/ai/settings',{method:'POST',headers:authHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body)});
+    var d=await r.json();
+    if(!r.ok) throw new Error(d.error||'Save failed');
+    toast('✓ Settings saved');
+    closeSettings(); refreshAIStatus();
+    document.getElementById('sApiKey').value=''; document.getElementById('sToken').value='';
+  }catch(e){toast('Error: '+e.message,'err');}
+}
+
+// ── AI FILE ANALYSIS ─────────────────────────────────────────
+var aFiles = [];
+var afi = document.getElementById('afi'), uaA = document.getElementById('uaA');
+afi.addEventListener('change', e => { if (e.target.files.length) setAFiles(e.target.files); });
+['dragover','dragleave','drop'].forEach(ev => uaA.addEventListener(ev, e => {
+  if (ev === 'dragover') { e.preventDefault(); uaA.classList.add('dv'); }
+  else if (ev === 'dragleave') { uaA.classList.remove('dv'); }
+  else { e.preventDefault(); uaA.classList.remove('dv'); if (e.dataTransfer.files.length) setAFiles(e.dataTransfer.files); }
+}));
+function setAFiles(files) {
+  aFiles = Array.from(files);
+  var l = document.getElementById('afl');
+  l.outerHTML = aFiles.length === 1
+    ? '<span class="fn" id="afl">📎 ' + aFiles[0].name + '</span>'
+    : '<span class="fm" id="afl">📚 ' + aFiles.length + ' files selected</span>';
+  toast(aFiles.length + ' file(s) loaded');
+}
+
+function b64ToBlob(b64, mime) {
+  var bin = atob(b64);
+  var arr = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+async function analyzeFiles() {
+  if (!aFiles.length) { toast('Upload at least one file', 'err'); return; }
+  var btn = document.getElementById('aBtn');
+  btn.disabled = true; btn.textContent = '⏳ Analyzing…';
+  document.getElementById('aResult').style.display = 'none';
+  try {
+    var fd = new FormData();
+    aFiles.forEach(f => fd.append('files', f));
+    fd.append('instruction', document.getElementById('aInst').value);
+    fd.append('outputFormat', document.getElementById('aFmt').value);
+    var r = await fetch('/api/ai/analyze', { method: 'POST', body: fd, headers: authHeaders() });
+    if (r.status === 401) { doLogout(); return; }
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Analysis failed');
+    document.getElementById('aText').textContent = d.analysis || '(no result)';
+    document.getElementById('aResult').style.display = 'block';
+    var wrap = document.getElementById('aDlWrap');
+    wrap.innerHTML = '';
+    if (d.output) {
+      var dl = document.createElement('button');
+      dl.className = 'ab adl';
+      dl.textContent = '💾 Download ' + d.output.filename;
+      dl.onclick = function() { saveBlob(b64ToBlob(d.output.base64, d.output.mime), d.output.filename); };
+      wrap.appendChild(dl);
+    }
+    toast('✓ Analysis done');
+  } catch (e) {
+    toast('Error: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = '🔍 Analyze';
+  }
+}
+
+// ── PWA ──────────────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+}
+
+window.doLogin=doLogin; window.doLogout=doLogout; window.R=R; window.runEW=runEW;
+window.showView=showView; window.openSettings=openSettings; window.closeSettings=closeSettings;
+window.saveSettings=saveSettings; window.confirmPush=confirmPush; window.discardPlan=discardPlan;
+window.analyzeFiles=analyzeFiles;
 })();
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>

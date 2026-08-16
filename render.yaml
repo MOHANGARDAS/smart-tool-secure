@@ -1,0 +1,26 @@
+# SMART-TOOL/M — one-click deploy to Render (free tier, no card required)
+# Usage: push this repo to GitHub, then on render.com use "New → Blueprint"
+# or click: https://render.com/deploy?repo=https://github.com/MOHANGARDAS/smart-tool-secure
+services:
+  - type: web
+    name: smart-tool-m
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_OWNER
+        value: MOHANGARDAS
+      - key: GITHUB_REPO
+        value: smart-tool-secure
+      - key: GITHUB_BRANCH
+        value: main
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_KEY
+        value: "1121"
+      - key: PORT
+        value: "3000"

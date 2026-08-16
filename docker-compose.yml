@@ -1,0 +1,21 @@
+services:
+  smarttool:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATA_DIR=/app/data
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - GITHUB_OWNER=${GITHUB_OWNER:-MOHANGARDAS}
+      - GITHUB_REPO=${GITHUB_REPO:-smart-tool-secure}
+      - GITHUB_BRANCH=${GITHUB_BRANCH:-main}
+      - JWT_SECRET=${JWT_SECRET:-smarttool-master-secret-786}
+      - ADMIN_KEY=${ADMIN_KEY:-1121}
+    volumes:
+      - smarttool_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  smarttool_data:

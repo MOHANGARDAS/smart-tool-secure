@@ -1,0 +1,16 @@
+{
+  "name": "SMART-TOOL/M",
+  "short_name": "SMART-TOOL/M",
+  "description": "Secure file tools + AI GitHub repo assistant",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080A10",
+  "theme_color": "#080A10",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
