@@ -47,7 +47,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .le{color:var(--red);font-size:11.5px;min-height:18px;}
 
 /* APP */
-#AP{display:none;position:relative;z-index:1;min-height:100vh;}
+#AP{display:block;position:relative;z-index:1;min-height:100vh;}
 .app-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(8,10,16,0.88);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
 .nav-logo{display:flex;align-items:center;gap:10px;}
 .nav-logo-svg{width:28px;height:28px;}
@@ -192,36 +192,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="LK">
-  <div class="lk-logo-wrap">
-    <svg class="lk-logo-svg" viewBox="0 0 56 56" fill="none">
-      <rect width="56" height="56" rx="16" fill="url(#a1)"/>
-      <rect x="0.5" y="0.5" width="55" height="55" rx="15.5" stroke="url(#a2)" stroke-opacity="0.4"/>
-      <path d="M14 28C14 20.268 20.268 14 28 14C35.732 14 42 20.268 42 28" stroke="url(#a3)" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M19 28C19 23.029 23.029 19 28 19C32.971 19 37 23.029 37 28" stroke="url(#a4)" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6"/>
-      <circle cx="28" cy="30" r="5" fill="url(#a5)"/>
-      <circle cx="28" cy="30" r="2.2" fill="#080A10"/>
-      <defs>
-        <linearGradient id="a1" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#0F1525"/><stop offset="1" stop-color="#0A0E1A"/></linearGradient>
-        <linearGradient id="a2" x1="0" y1="0" x2="56" y2="56"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></linearGradient>
-        <linearGradient id="a3" x1="14" y1="14" x2="42" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
-        <linearGradient id="a4" x1="19" y1="19" x2="37" y2="28" gradientUnits="userSpaceOnUse"><stop stop-color="#00BFA5"/><stop offset="1" stop-color="#4F8EF7"/></linearGradient>
-        <radialGradient id="a5" cx="50%" cy="50%" r="50%"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#00BFA5"/></radialGradient>
-      </defs>
-    </svg>
-    <div class="lk-wordmark"><span class="wb">SMART</span>-TOOL/<span class="wt">M</span></div>
-  </div>
-  <div class="lk-card">
-    <div class="lk-title">Welcome Back</div>
-    <div class="lk-sub">Sign in to your account</div>
-    <input class="lk-field" type="text" id="uname" placeholder="Username" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('pass').focus()"/>
-    <input class="lk-field" type="password" id="pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button class="lk-btn" id="loginBtn" onclick="doLogin()">Sign In →</button>
-    <div class="le" id="loginErr"></div>
-  </div>
-</div>
-
 <!-- MAIN APP -->
 <div id="AP">
   <nav class="app-nav">
@@ -241,9 +211,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       <div class="nav-wordmark"><span class="wb">SMART</span><span class="ww">-TOOL/</span><span class="wt">M</span></div>
     </div>
     <div class="nav-right">
-      <div class="session-chip"><span class="session-dot"></span><span id="uLabel">Secure Session</span></div>
       <button class="nav-ic" onclick="openSettings()">⚙ Settings</button>
-      <button class="nav-ic" onclick="doLogout()">Sign Out</button>
     </div>
   </nav>
 
@@ -472,52 +440,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 (function(){
 'use strict';
 
-var token = localStorage.getItem('stm_token') || '';
-var currentUser = null;
 var oBlob=null, oName='', sF=null, eF=null;
 
-function authHeaders(h){ h = h || {}; if(token) h['Authorization'] = 'Bearer '+token; return h; }
-
-// ── AUTH ──────────────────────────────────────────────────────
-async function doLogin(){
-  var uname=document.getElementById('uname').value.trim();
-  var pass=document.getElementById('pass').value;
-  if(!uname||!pass){document.getElementById('loginErr').textContent='Enter username and password';return;}
-  var btn=document.getElementById('loginBtn');
-  btn.disabled=true;btn.textContent='Signing in…';
-  document.getElementById('loginErr').textContent='';
-  try{
-    var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:uname,password:pass})});
-    var d=await r.json();
-    if(!r.ok){document.getElementById('loginErr').textContent=d.error||'Login failed';return;}
-    token=d.token; localStorage.setItem('stm_token',token);
-    currentUser=d.username;
-    enterApp();
-  }catch(e){document.getElementById('loginErr').textContent='Network error';}
-  finally{btn.disabled=false;btn.textContent='Sign In →';}
-}
-
-function enterApp(){
-  document.getElementById('LK').style.display='none';
-  document.getElementById('AP').style.display='block';
-  document.getElementById('uLabel').textContent=currentUser;
-  refreshAIStatus();
-}
-
-async function doLogout(){
-  try{await fetch('/api/logout',{method:'POST',headers:authHeaders()});}catch(e){}
-  token=''; localStorage.removeItem('stm_token'); currentUser=null;
-  document.getElementById('AP').style.display='none';
-  document.getElementById('LK').style.display='flex';
-  document.getElementById('uname').value=''; document.getElementById('pass').value='';
-}
-
-if(token){
-  fetch('/api/me',{headers:authHeaders()})
-    .then(r=>r.ok?r.json():null)
-    .then(d=>{ if(d&&d.username){currentUser=d.username;enterApp();} else {doLogout();} })
-    .catch(()=>{});
-}
+function authHeaders(h){ return h || {}; }
 
 function showView(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
@@ -557,7 +482,6 @@ async function R(t){
     ss('Uploading & processing…');
     var fd=new FormData();fd.append('file',sF);
     var r=await fetch('/api/process/'+t,{method:'POST',body:fd,headers:authHeaders()});
-    if(r.status===401){doLogout();return;}
     if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
     sp(80);ss('Receiving output…');
     var blob=await r.blob();
@@ -576,7 +500,6 @@ async function runEW(){
     ss('Uploading '+eF.length+' PDFs…');lg('Files: '+eF.length);
     var fd=new FormData();eF.forEach(f=>fd.append('files',f));
     var r=await fetch('/api/process/ew',{method:'POST',body:fd,headers:authHeaders()});
-    if(r.status===401){doLogout();return;}
     if(!r.ok){var e=await r.json();throw new Error(e.error||'Server error');}
     sp(90);ss('Receiving output…');
     var blob=await r.blob();
@@ -638,7 +561,7 @@ var aiHistory=[]; var lastPlan=null; var aiBusy=false;
 
 async function refreshAIStatus(){
   var dot=document.getElementById('aiDot'), st=document.getElementById('aiStatus');
-  if(!token){dot.className='ai-dot';st.textContent='sign in';return;}
+
   try{
     var r=await fetch('/api/ai/settings',{headers:authHeaders()});
     if(!r.ok){dot.className='ai-dot';st.textContent='unavailable';return;}
@@ -653,7 +576,7 @@ async function refreshAIStatus(){
 
 async function loadMemory(){
   var box=document.getElementById('memoryBox');
-  if(!token){box.textContent='Sign in first.';return;}
+
   box.textContent='Loading rules…';
   try{
     var r=await fetch('/api/ai/memory',{headers:authHeaders()});
@@ -728,14 +651,13 @@ function discardPlan(){ lastPlan=null; document.getElementById('aiPlan').innerHT
 
 async function sendAI(text){
   if(!text||aiBusy) return;
-  if(!token){toast('Sign in first','err');return;}
+
   aiBusy=true;
   addMsg(text,'user');
   document.getElementById('aiInput').value='';
   var typing=addMsg('🤖 Thinking…','sys');
   try{
     var r=await fetch('/api/ai/assist',{method:'POST',headers:authHeaders({'Content-Type':'application/json'}),body:JSON.stringify({prompt:text,history:aiHistory})});
-    if(r.status===401){doLogout();return;}
     var d=await r.json();
     if(!r.ok) throw new Error(d.error||'AI error');
     typing.remove();
@@ -884,7 +806,6 @@ async function analyzeFiles() {
     fd.append('instruction', document.getElementById('aInst').value);
     fd.append('outputFormat', document.getElementById('aFmt').value);
     var r = await fetch('/api/ai/analyze', { method: 'POST', body: fd, headers: authHeaders() });
-    if (r.status === 401) { doLogout(); return; }
     var d = await r.json();
     if (!r.ok) throw new Error(d.error || 'Analysis failed');
     document.getElementById('aText').textContent = d.analysis || '(no result)';
@@ -911,10 +832,12 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
 }
 
-window.doLogin=doLogin; window.doLogout=doLogout; window.R=R; window.runEW=runEW;
+window.R=R; window.runEW=runEW;
 window.showView=showView; window.openSettings=openSettings; window.closeSettings=closeSettings;
 window.saveSettings=saveSettings; window.confirmPush=confirmPush; window.discardPlan=discardPlan;
 window.analyzeFiles=analyzeFiles;
+// App is public now — refresh AI status on load
+refreshAIStatus();
 })();
 </script>
 </body>

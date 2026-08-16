@@ -129,20 +129,17 @@ function ghConfig() {
   return { token, owner, repo, branch };
 }
 
-// ── AUTH MIDDLEWARE ─────────────────────────────────────────────
+// ── AUTH MIDDLEWARE (login disabled — all endpoints public) ─────
 function requireAuth(req, res, next) {
+  // No login required anymore. Keep a dummy user so route code still works.
   const token = (req.headers['authorization'] || '').split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Not authenticated' });
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    if (activeSessions.has(decoded.username) && activeSessions.get(decoded.username) !== token) {
-      return res.status(401).json({ error: 'Session terminated' });
-    }
+    const decoded = token ? jwt.verify(token, JWT_SECRET) : { username: 'guest' };
     req.user = decoded;
-    next();
   } catch {
-    return res.status(401).json({ error: 'Invalid session' });
+    req.user = { username: 'guest' };
   }
+  next();
 }
 
 // ═══════════════════════════════════════════════════════════════
